@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Farmacología clínica · Primer parcial · Enfermería UPNA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F7F9; --surface:#FFFFFF; --ink:#16212C; --muted:#56616E; --line:#D8DEE5; --soft:#EEF1F4;
+  --ok:#2E7D4F; --ok-bg:#E6F3EB; --bad:#B23A2E; --bad-bg:#FBE9E6; --warn:#9A5B00; --warn-bg:#FDF2DD;
+  --b1:#1E6C86; --b2:#6B7C12; --b3:#7B3F6E; --b4:#2F5C9A; --b5:#A07400; --b6:#B24E16;
+  --acc:var(--b1);
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#11171D; --surface:#19212A; --ink:#E7ECF1; --muted:#A3AEBA; --line:#2C3743; --soft:#212B35;
+    --ok:#6CC596; --ok-bg:#1B3428; --bad:#F08A7E; --bad-bg:#3A1F1C; --warn:#E9B45A; --warn-bg:#382B14;
+    --b1:#4FA7C4; --b2:#A6B83E; --b3:#C07BB2; --b4:#7BA3DD; --b5:#D9AE3B; --b6:#E7864F;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#11171D; --surface:#19212A; --ink:#E7ECF1; --muted:#A3AEBA; --line:#2C3743; --soft:#212B35;
+  --ok:#6CC596; --ok-bg:#1B3428; --bad:#F08A7E; --bad-bg:#3A1F1C; --warn:#E9B45A; --warn-bg:#382B14;
+  --b1:#4FA7C4; --b2:#A6B83E; --b3:#C07BB2; --b4:#7BA3DD; --b5:#D9AE3B; --b6:#E7864F;
+  color-scheme: dark;
+}
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+html{ scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px); }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--body); font-size:17px; line-height:1.6; }
+a{ color:inherit; }
+button{ font:inherit; color:inherit; }
+:focus-visible{ outline:3px solid var(--acc); outline-offset:2px; border-radius:4px; }
+.skip{ position:absolute; left:-999px; top:0; }
+.skip:focus{ left:12px; top:12px; z-index:50; background:var(--surface); padding:8px 12px; }
+
+/* ---------- estructura ---------- */
+.shell{ display:grid; grid-template-columns:300px minmax(0,1fr); min-height:100vh; }
+.shell > *{ min-width:0; }
+aside.index{ position:sticky; top:0; height:100vh; overflow-y:auto; background:var(--surface); border-right:1px solid var(--line); padding:22px 0 40px; }
+.brand{ padding:0 22px 18px; border-bottom:1px solid var(--line); margin-bottom:10px; }
+.brand a{ text-decoration:none; display:block; }
+.brand strong{ font-family:var(--display); font-size:1.32rem; font-weight:800; line-height:1.1; letter-spacing:-.01em; display:block; }
+.brand span{ color:var(--muted); font-size:.88rem; }
+.search{ margin:12px 22px 6px; position:relative; }
+.search input{ width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; background:var(--paper); color:var(--ink); font:inherit; font-size:.95rem; }
+.navlinks{ padding:6px 14px 4px; display:flex; gap:6px; flex-wrap:wrap; }
+.navlinks a{ text-decoration:none; font-size:.92rem; padding:6px 10px; border-radius:7px; border:1px solid var(--line); }
+.navlinks a[aria-current="page"]{ background:var(--ink); color:var(--surface); border-color:var(--ink); }
+
+/* pestañas de bloque: el elemento distintivo, como separadores de un vademécum */
+.tab{ margin:10px 0 0; }
+.tab > button{ width:100%; display:flex; align-items:center; gap:12px; text-align:left; background:none; border:0; cursor:pointer; padding:10px 18px 10px 0; }
+.tab .chip{ flex:none; width:44px; height:38px; border-radius:0 10px 10px 0; background:var(--c); color:var(--surface); display:grid; place-items:center; font-family:var(--display); font-weight:800; font-size:1.05rem; }
+.tab .tt{ font-weight:700; line-height:1.25; font-size:.98rem; }
+.tab .tt small{ display:block; font-weight:400; color:var(--muted); font-size:.82rem; }
+.tab ol{ list-style:none; margin:2px 0 6px; padding:0 14px 0 56px; display:none; }
+.tab.open ol{ display:block; }
+.tab ol a{ display:flex; gap:8px; align-items:baseline; text-decoration:none; padding:5px 8px; border-radius:6px; font-size:.93rem; color:var(--ink); }
+.tab ol a:hover{ background:var(--soft); }
+.tab ol a[aria-current="page"]{ background:color-mix(in srgb, var(--c) 16%, transparent); font-weight:700; }
+.tab ol a .n{ color:var(--c); font-weight:700; min-width:1.6em; }
+.tab ol a .done{ margin-left:auto; color:var(--ok); font-size:.8rem; }
+
+main{ padding:28px clamp(18px,4vw,56px) 80px; max-width:1060px; width:100%; }
+.topbar{ display:none; }
+
+/* ---------- portada ---------- */
+.hero{ padding:26px 0 8px; }
+.hero h1{ font-family:var(--display); font-weight:800; font-size:clamp(2.1rem,5vw,3.4rem); line-height:1.02; letter-spacing:-.02em; margin:0 0 14px; max-width:16ch; }
+.hero p{ font-size:1.1rem; color:var(--muted); max-width:62ch; margin:0 0 8px; }
+.binder{ display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:16px; margin:30px 0; }
+.binder a{ text-decoration:none; display:block; background:var(--surface); border:1px solid var(--line); border-left:10px solid var(--c); border-radius:4px 12px 12px 4px; padding:16px 18px 18px; }
+.binder a:hover{ border-color:var(--c); }
+.binder h2{ font-family:var(--display); margin:0 0 2px; font-size:1.25rem; line-height:1.2; padding-right:56px; }
+.binder .roman{ color:var(--c); font-family:var(--display); font-weight:800; font-size:2.2rem; line-height:1; float:right; }
+.binder p{ margin:6px 0 0; color:var(--muted); font-size:.94rem; }
+.binder .bar{ height:6px; background:var(--soft); border-radius:3px; margin-top:12px; overflow:hidden; }
+.binder .bar i{ display:block; height:100%; background:var(--c); }
+.how{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; margin-top:12px; }
+.how div{ border-top:3px solid var(--ink); padding-top:10px; }
+.how h3{ font-family:var(--display); margin:0 0 4px; font-size:1.08rem; }
+.how p{ margin:0; color:var(--muted); font-size:.95rem; }
+
+/* ---------- página de tema ---------- */
+.thead{ display:grid; grid-template-columns:auto 1fr; gap:6px 24px; align-items:end; padding:10px 0 22px; border-bottom:2px solid var(--c); margin-bottom:26px; }
+.thead .big{ font-family:var(--display); font-weight:800; font-size:clamp(4rem,11vw,7.5rem); line-height:.82; color:var(--c); letter-spacing:-.04em; grid-row:span 2; }
+.thead .blk{ color:var(--muted); font-size:.95rem; }
+.thead h1{ font-family:var(--display); font-weight:800; font-size:clamp(1.7rem,3.6vw,2.6rem); line-height:1.08; margin:0; letter-spacing:-.015em; }
+.lede{ font-size:1.15rem; max-width:64ch; margin:0 0 26px; }
+h2.sec{ font-family:var(--display); font-size:1.45rem; margin:38px 0 14px; letter-spacing:-.01em; }
+ul.keys{ list-style:none; padding:0; margin:0; display:grid; gap:10px; max-width:76ch; }
+ul.keys li{ position:relative; padding:12px 16px 12px 46px; background:var(--surface); border:1px solid var(--line); border-radius:10px; }
+ul.keys li::before{ content:""; position:absolute; left:16px; top:20px; width:14px; height:14px; border-radius:50%; background:var(--c); }
+.figure{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:18px; margin:18px 0 0; overflow-x:auto; }
+.figure svg{ display:block; width:100%; height:auto; min-width:560px; }
+.figure figcaption{ color:var(--muted); font-size:.9rem; margin-top:8px; }
+
+/* fichas de grupo: estilo etiqueta de medicamento */
+.fichas{ display:grid; gap:12px; }
+details.ficha{ background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+details.ficha summary{ list-style:none; cursor:pointer; display:grid; grid-template-columns:8px 1fr auto; gap:14px; align-items:center; padding:0 16px 0 0; }
+details.ficha summary::-webkit-details-marker{ display:none; }
+details.ficha summary .strip{ align-self:stretch; background:var(--c); }
+details.ficha summary .nm{ padding:14px 0; }
+details.ficha summary .nm b{ font-family:var(--display); font-size:1.12rem; display:block; line-height:1.25; }
+details.ficha summary .nm span{ color:var(--muted); font-size:.92rem; }
+details.ficha summary .pm{ font-size:1.4rem; color:var(--c); transition:transform .2s; }
+details.ficha[open] summary .pm{ transform:rotate(45deg); }
+.ficha .body{ padding:2px 20px 18px 30px; display:grid; gap:10px; }
+.ficha .row{ display:grid; grid-template-columns:130px 1fr; gap:12px; }
+.ficha .row > b{ color:var(--muted); font-weight:700; font-size:.92rem; padding-top:2px; }
+.chips{ display:flex; flex-wrap:wrap; gap:6px; }
+.chips span{ background:color-mix(in srgb, var(--c) 13%, var(--surface)); border:1px solid color-mix(in srgb, var(--c) 35%, transparent); border-radius:999px; padding:2px 11px; font-size:.92rem; }
+.alerta{ background:var(--warn-bg); border-left:4px solid var(--warn); border-radius:6px; padding:9px 12px; font-size:.96rem; }
+.alerts{ display:grid; gap:10px; max-width:80ch; }
+.alerts div{ background:var(--warn-bg); border-left:5px solid var(--warn); border-radius:8px; padding:12px 16px; }
+.links{ color:var(--muted); font-size:.95rem; }
+
+/* cuestionario */
+.quiz{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:6px 22px 20px; }
+.q{ padding:16px 0 14px; border-bottom:1px dashed var(--line); }
+.q:last-of-type{ border-bottom:0; }
+.q h3{ font-size:1.05rem; margin:0 0 10px; line-height:1.4; }
+.q h3 .num{ color:var(--c); font-family:var(--display); margin-right:6px; }
+.opts{ display:grid; gap:8px; }
+.opts button{ text-align:left; background:var(--paper); border:1px solid var(--line); border-radius:9px; padding:10px 14px; cursor:pointer; display:grid; grid-template-columns:28px 1fr; gap:8px; align-items:start; }
+.opts button:hover:not(:disabled){ border-color:var(--c); }
+.opts button .l{ font-weight:700; color:var(--c); }
+.opts button.ok{ background:var(--ok-bg); border-color:var(--ok); }
+.opts button.bad{ background:var(--bad-bg); border-color:var(--bad); }
+.opts button:disabled{ cursor:default; }
+.expl{ margin-top:10px; padding:10px 14px; border-radius:8px; background:var(--soft); font-size:.96rem; display:none; }
+.expl.show{ display:block; }
+.expl b.r{ color:var(--ok); } .expl b.w{ color:var(--bad); }
+.score{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; padding-top:12px; }
+.score p{ margin:0; font-weight:700; }
+.btn{ background:var(--ink); color:var(--surface); border:0; border-radius:9px; padding:10px 16px; cursor:pointer; font-weight:700; text-decoration:none; display:inline-block; }
+.btn.ghost{ background:transparent; color:var(--ink); border:1px solid var(--line); }
+.pager{ display:flex; justify-content:space-between; gap:12px; margin-top:40px; flex-wrap:wrap; }
+.pager a{ text-decoration:none; border:1px solid var(--line); border-radius:10px; padding:12px 16px; background:var(--surface); max-width:48%; }
+.pager a small{ display:block; color:var(--muted); }
+
+/* repaso e índice */
+.filters{ display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 18px; }
+.filters label{ display:flex; align-items:center; gap:6px; border:1px solid var(--line); border-radius:999px; padding:5px 12px; background:var(--surface); cursor:pointer; font-size:.95rem; }
+.filters input{ accent-color:var(--ink); }
+.az{ columns:3 230px; column-gap:28px; }
+.az .letter{ font-family:var(--display); font-weight:800; font-size:1.4rem; margin:14px 0 4px; break-after:avoid; }
+.az a{ display:block; text-decoration:none; padding:3px 0; break-inside:avoid; }
+.az a small{ color:var(--muted); }
+.az a i{ display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--c); margin-right:6px; }
+.empty{ color:var(--muted); }
+.results a{ display:block; text-decoration:none; padding:10px 14px; border:1px solid var(--line); border-left:6px solid var(--c); border-radius:8px; margin-bottom:8px; background:var(--surface); }
+.results a small{ color:var(--muted); display:block; }
+footer{ color:var(--muted); font-size:.88rem; margin-top:60px; border-top:1px solid var(--line); padding-top:14px; }
+
+/* ---------- móvil ---------- */
+@media (max-width: 880px){
+  .shell{ grid-template-columns:minmax(0,1fr); }
+  aside.index{ position:fixed; inset:0 auto 0 0; width:min(86vw,320px); z-index:30; transform:translateX(-105%); transition:transform .25s; padding-top:calc(env(safe-area-inset-top,0px) + 18px); }
+  body.menu aside.index{ transform:none; box-shadow:0 0 0 100vmax rgba(0,0,0,.35); }
+  .topbar{ display:flex; position:sticky; top:0; z-index:20; align-items:center; gap:12px; padding:10px 16px; padding-top:calc(env(safe-area-inset-top,0px) + 10px); margin-top:calc(-1 * env(safe-area-inset-top,0px)); background:var(--surface); border-bottom:1px solid var(--line); }
+  .topbar button{ background:none; border:1px solid var(--line); border-radius:8px; padding:6px 12px; cursor:pointer; }
+  .topbar strong{ font-family:var(--display); }
+  main{ padding-top:18px; }
+  .ficha .row{ grid-template-columns:1fr; gap:2px; }
+  .thead{ grid-template-columns:1fr; }
+  .thead .big{ grid-row:auto; }
+  .pager a{ max-width:100%; flex:1 1 100%; }
+}
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="topbar"><button type="button" id="menuBtn" aria-expanded="false" aria-controls="indice">Temas</button><strong>Farmacología · 1.er parcial</strong></div>
+<div class="shell">
+  <aside class="index" id="indice" aria-label="Índice de temas">
+    <div class="brand"><a href="#inicio"><strong>Farmacología clínica</strong><span>Primer parcial · Bloques I a VI · Enfermería UPNA</span></a></div>
+    <div class="search"><input type="search" id="q" placeholder="Busca un fármaco o un tema" aria-label="Buscar un fármaco o un tema"></div>
+    <nav class="navlinks" aria-label="Secciones">
+      <a href="#inicio" data-r="inicio">Inicio</a><a href="#repaso" data-r="repaso">Repaso</a><a href="#farmacos" data-r="farmacos">Fármacos A-Z</a>
+    </nav>
+    <nav id="tabs" aria-label="Bloques y temas"></nav>
+  </aside>
+  <main id="contenido" tabindex="-1"></main>
+</div>
+<script>
+var BLOQUES = [
+ {id:"I",  nombre:"Principios generales", color:"b1", temas:[1,2,3], desc:"Qué es un medicamento, qué hace el cuerpo con él, qué hace él con el cuerpo y cuándo hace daño."},
+ {id:"II", nombre:"Sistema nervioso autónomo", color:"b2", temas:[4,5,6,7,8], desc:"Simpático y parasimpático: neurotransmisor, receptor, efecto y fármaco."},
+ {id:"III",nombre:"Autacoides", color:"b3", temas:[9,10], desc:"Histamina, serotonina y migraña."},
+ {id:"IV", nombre:"Sistema nervioso periférico somático", color:"b4", temas:[11,12], desc:"Anestésicos locales y relajantes musculares."},
+ {id:"V",  nombre:"Sistema nervioso central", color:"b5", temas:[13,14,15,16,17,18], desc:"Parkinson, depresión, ansiedad, epilepsia, psicosis y anestesia general."},
+ {id:"VI", nombre:"Dolor e inflamación", color:"b6", temas:[19,20,21], desc:"AINE, glucocorticoides y opioides."}
+];
+
+var S = 'font-family:var(--body);font-size:13px;';
+var FIGS = {
+curva: {cap:"Curva de concentración plasmática tras una dosis oral. El efecto aparece cuando la concentración supera la mínima eficaz y es seguro mientras no alcance la tóxica: ese intervalo es la ventana terapéutica.",
+svg:'<svg viewBox="0 0 640 300" role="img" aria-label="Curva de concentración plasmática frente al tiempo con ventana terapéutica" style="'+S+'">'+
+'<rect x="70" y="95" width="540" height="85" style="fill:var(--c);opacity:.12"/>'+
+'<line x1="70" y1="95" x2="610" y2="95" style="stroke:var(--bad);stroke-dasharray:6 5;stroke-width:1.5"/>'+
+'<line x1="70" y1="180" x2="610" y2="180" style="stroke:var(--ok);stroke-dasharray:6 5;stroke-width:1.5"/>'+
+'<text x="606" y="88" text-anchor="end" style="fill:var(--bad);font-weight:700">Concentración mínima tóxica</text>'+
+'<text x="606" y="198" text-anchor="end" style="fill:var(--ok);font-weight:700">Concentración mínima eficaz</text>'+
+'<text x="90" y="140" style="fill:var(--c);font-weight:700">Ventana terapéutica</text>'+
+'<path d="M70 260 C 120 110, 170 70, 210 72 S 330 150, 420 205 S 560 250, 610 255" style="fill:none;stroke:var(--ink);stroke-width:3"/>'+
+'<line x1="70" y1="20" x2="70" y2="262" style="stroke:var(--muted)"/><line x1="70" y1="262" x2="615" y2="262" style="stroke:var(--muted)"/>'+
+'<circle cx="208" cy="72" r="5" style="fill:var(--ink)"/><text x="218" y="62" style="fill:var(--ink);font-weight:700">Cmáx</text>'+
+'<line x1="208" y1="72" x2="208" y2="262" style="stroke:var(--muted);stroke-dasharray:3 4"/><text x="208" y="280" text-anchor="middle" style="fill:var(--muted)">tmáx</text>'+
+'<line x1="103" y1="180" x2="103" y2="262" style="stroke:var(--muted);stroke-dasharray:3 4"/><text x="103" y="280" text-anchor="middle" style="fill:var(--muted)">inicio del efecto</text>'+
+'<line x1="400" y1="180" x2="400" y2="262" style="stroke:var(--muted);stroke-dasharray:3 4"/>'+
+'<text x="252" y="244" text-anchor="middle" style="fill:var(--muted)">duración del efecto</text><line x1="108" y1="250" x2="396" y2="250" style="stroke:var(--muted);marker-end:url(#ah);marker-start:url(#ah)"/>'+
+'<defs><marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" style="fill:var(--muted)"/></marker></defs>'+
+'<text x="30" y="140" transform="rotate(-90 30 140)" text-anchor="middle" style="fill:var(--muted)">Concentración plasmática</text><text x="610" y="296" text-anchor="end" style="fill:var(--muted)">Tiempo</text></svg>'},
+
+potencia: {cap:"Eficacia y potencia. El fármaco A es más potente (necesita menos dosis para el 50 % de su efecto: menor DE₅₀), pero B es más eficaz (alcanza un efecto máximo mayor).",
+svg:'<svg viewBox="0 0 640 280" role="img" aria-label="Curvas dosis-respuesta de dos fármacos" style="'+S+'">'+
+'<line x1="70" y1="20" x2="70" y2="240" style="stroke:var(--muted)"/><line x1="70" y1="240" x2="615" y2="240" style="stroke:var(--muted)"/>'+
+'<line x1="70" y1="40" x2="615" y2="40" style="stroke:var(--line);stroke-dasharray:4 4"/><text x="64" y="44" text-anchor="end" style="fill:var(--muted)">100 %</text>'+
+'<line x1="70" y1="120" x2="615" y2="120" style="stroke:var(--line);stroke-dasharray:4 4"/><text x="64" y="124" text-anchor="end" style="fill:var(--muted)">60 %</text>'+
+'<path d="M70 238 C 150 236, 170 200, 200 170 S 250 122, 330 121 L 610 120" style="fill:none;stroke:var(--c);stroke-width:3"/>'+
+'<path d="M70 239 C 250 238, 300 200, 350 140 S 430 42, 520 41 L 610 40" style="fill:none;stroke:var(--ink);stroke-width:3"/>'+
+'<text x="250" y="110" style="fill:var(--c);font-weight:700">A: más potente, menos eficaz</text>'+
+'<text x="430" y="30" style="fill:var(--ink);font-weight:700">B: más eficaz</text>'+
+'<circle cx="205" cy="180" r="5" style="fill:var(--c)"/><line x1="205" y1="180" x2="205" y2="240" style="stroke:var(--c);stroke-dasharray:3 4"/><text x="205" y="258" text-anchor="middle" style="fill:var(--c)">DE₅₀ de A</text>'+
+'<circle cx="372" cy="140" r="5" style="fill:var(--ink)"/><line x1="372" y1="140" x2="372" y2="240" style="stroke:var(--ink);stroke-dasharray:3 4"/><text x="372" y="258" text-anchor="middle" style="fill:var(--ink)">DE₅₀ de B</text>'+
+'<text x="610" y="276" text-anchor="end" style="fill:var(--muted)">Dosis (escala logarítmica)</text><text x="28" y="130" transform="rotate(-90 28 130)" text-anchor="middle" style="fill:var(--muted)">Efecto</text></svg>'},
+
+ram: {cap:"Clasificación de las RAM. La mayoría son de tipo A: previsibles, dependientes de la dosis y explicables por el propio mecanismo del fármaco.",
+svg:(function(){ var t=[["A","Aumentada","Dosis-dependiente, previsible, frecuente. Ej.: hipoglucemia por insulina."],["B","Bizarra","Impredecible, no depende de la dosis: alergia, idiosincrasia."],["C","Crónica","Por uso prolongado. Ej.: Cushing por corticoides."],["D","Diferida","Aparece tiempo después: teratogenia, cáncer."],["E","Fin de tratamiento","Al retirar: rebote, abstinencia."],["F","Fallo terapéutico","Falta de eficacia, a menudo por interacción."]];
+ var s='<svg viewBox="0 0 660 230" role="img" aria-label="Tipos de reacciones adversas de la A a la F" style="'+S+'">';
+ t.forEach(function(r,i){ var x=8+i*108; s+='<rect x="'+x+'" y="10" width="100" height="210" rx="10" style="fill:var(--surface);stroke:var(--line)"/><rect x="'+x+'" y="10" width="100" height="58" rx="10" style="fill:var(--c);opacity:'+(i===0?1:.75)+'"/><text x="'+(x+50)+'" y="52" text-anchor="middle" style="fill:var(--surface);font-family:var(--display);font-size:34px;font-weight:800">'+r[0]+'</text><text x="'+(x+50)+'" y="90" text-anchor="middle" style="fill:var(--ink);font-weight:700">'+r[1]+'</text>';
+   var words=r[2].split(" "), line="", y=114; words.forEach(function(w){ if((line+" "+w).length>15){ s+='<text x="'+(x+50)+'" y="'+y+'" text-anchor="middle" style="fill:var(--muted);font-size:12px">'+line+'</text>'; y+=16; line=w; } else line=(line?line+" ":"")+w; }); s+='<text x="'+(x+50)+'" y="'+y+'" text-anchor="middle" style="fill:var(--muted);font-size:12px">'+line+'</text>'; });
+ return s+'</svg>'; })()},
+
+sna: {cap:"Las dos ramas del sistema nervioso autónomo. En los ganglios, siempre acetilcolina sobre receptores nicotínicos; en el órgano, acetilcolina sobre muscarínicos (parasimpático) o noradrenalina sobre α y β (simpático).",
+svg:'<svg viewBox="0 0 680 300" role="img" aria-label="Esquema del sistema nervioso autónomo" style="'+S+'">'+
+'<text x="130" y="30" style="fill:var(--c);font-weight:700;font-family:var(--display);font-size:16px">Parasimpático</text>'+
+'<line x1="130" y1="62" x2="420" y2="62" style="stroke:var(--c);stroke-width:4"/><circle cx="430" cy="62" r="11" style="fill:var(--surface);stroke:var(--c);stroke-width:3"/><line x1="442" y1="62" x2="540" y2="62" style="stroke:var(--c);stroke-width:4"/>'+
+'<rect x="545" y="44" width="125" height="36" rx="8" style="fill:var(--soft);stroke:var(--line)"/><text x="607" y="67" text-anchor="middle" style="fill:var(--ink)">órgano</text>'+
+'<text x="430" y="95" text-anchor="middle" style="fill:var(--muted)">ACh · nicotínico</text><text x="590" y="100" text-anchor="middle" style="fill:var(--c);font-weight:700">ACh · muscarínico</text>'+
+'<text x="330" y="52" text-anchor="middle" style="fill:var(--muted);font-size:12px">preganglionar larga</text>'+
+'<text x="130" y="140" style="fill:var(--ink);font-weight:700;font-family:var(--display);font-size:16px">Simpático</text>'+
+'<line x1="130" y1="172" x2="220" y2="172" style="stroke:var(--ink);stroke-width:4"/><circle cx="230" cy="172" r="11" style="fill:var(--surface);stroke:var(--ink);stroke-width:3"/><line x1="242" y1="172" x2="540" y2="172" style="stroke:var(--ink);stroke-width:4;stroke-dasharray:10 5"/>'+
+'<rect x="545" y="154" width="125" height="36" rx="8" style="fill:var(--soft);stroke:var(--line)"/><text x="607" y="177" text-anchor="middle" style="fill:var(--ink)">órgano</text>'+
+'<text x="230" y="205" text-anchor="middle" style="fill:var(--muted)">ACh · nicotínico</text><text x="595" y="210" text-anchor="middle" style="fill:var(--ink);font-weight:700">NA · α y β</text>'+
+'<text x="390" y="162" text-anchor="middle" style="fill:var(--muted);font-size:12px">postganglionar larga</text>'+
+'<line x1="130" y1="250" x2="420" y2="250" style="stroke:var(--ink);stroke-width:4"/><rect x="425" y="232" width="120" height="36" rx="8" style="fill:var(--soft);stroke:var(--line)"/><text x="485" y="255" text-anchor="middle" style="fill:var(--ink)">suprarrenal</text>'+
+'<text x="270" y="240" text-anchor="middle" style="fill:var(--muted);font-size:12px">ACh · nicotínico</text><text x="485" y="288" text-anchor="middle" style="fill:var(--ink);font-weight:700">adrenalina a la sangre</text>'+
+'<rect x="10" y="44" width="110" height="226" rx="10" style="fill:var(--soft);stroke:var(--line)"/><text x="65" y="162" text-anchor="middle" style="fill:var(--ink);font-weight:700">SNC</text></svg>'},
+
+cuadricula: {cap:"La cuadrícula del bloque: sabiendo una columna se deducen las cuatro casillas. Bloquear el parasimpático se parece a activar el simpático, y al revés.",
+svg:(function(){ var c=[["Activar","Tema 5 · Parasimpaticomiméticos","pilocarpina, neostigmina, donepezilo","Tema 7 · Simpaticomiméticos","fenilefrina, salbutamol, adrenalina"],["Bloquear","Tema 6 · Parasimpaticolíticos","atropina, escopolamina, ipratropio, oxibutinina","Tema 8 · Simpaticolíticos","tamsulosina, doxazosina, bisoprolol, propranolol"]];
+ var s='<svg viewBox="0 0 660 270" role="img" aria-label="Cuadrícula de los fármacos del sistema nervioso autónomo" style="'+S+'"><text x="290" y="24" text-anchor="middle" style="fill:var(--ink);font-weight:700">Colinérgico (parasimpático)</text><text x="535" y="24" text-anchor="middle" style="fill:var(--ink);font-weight:700">Adrenérgico (simpático)</text>';
+ c.forEach(function(r,i){ var y=38+i*115; s+='<text x="60" y="'+(y+62)+'" text-anchor="middle" style="fill:var(--ink);font-weight:700;font-family:var(--display);font-size:16px">'+r[0]+'</text>';
+  [[170,r[1],r[2]],[420,r[3],r[4]]].forEach(function(b,k){ s+='<rect x="'+b[0]+'" y="'+y+'" width="236" height="100" rx="10" style="fill:var(--c);opacity:'+((i+k)%2?0.14:0.26)+'"/><text x="'+(b[0]+118)+'" y="'+(y+38)+'" text-anchor="middle" style="fill:var(--ink);font-weight:700">'+b[1]+'</text>';
+   var words=b[2].split(" "), line="", yy=y+64; words.forEach(function(w){ if((line+" "+w).length>32){ s+='<text x="'+(b[0]+118)+'" y="'+yy+'" text-anchor="middle" style="fill:var(--muted)">'+line+'</text>'; yy+=17; line=w; } else line=(line?line+" ":"")+w; }); s+='<text x="'+(b[0]+118)+'" y="'+yy+'" text-anchor="middle" style="fill:var(--muted)">'+line+'</text>'; }); });
+ return s+'</svg>'; })()},
+
+balanza: {cap:"El Parkinson como balanza volcada: cae la dopamina del estriado y, en relativo, sobra acetilcolina. Se trata subiendo la dopamina o bajando la acetilcolina.",
+svg:'<svg viewBox="0 0 640 260" role="img" aria-label="Balanza entre dopamina y acetilcolina" style="'+S+'">'+
+'<polygon points="320,140 290,230 350,230" style="fill:var(--muted)"/>'+
+'<g transform="rotate(-12 320 140)"><line x1="120" y1="140" x2="520" y2="140" style="stroke:var(--ink);stroke-width:6;stroke-linecap:round"/>'+
+'<line x1="140" y1="140" x2="140" y2="170" style="stroke:var(--ink);stroke-width:2"/><line x1="500" y1="140" x2="500" y2="170" style="stroke:var(--ink);stroke-width:2"/>'+
+'<rect x="80" y="170" width="120" height="44" rx="10" style="fill:var(--c)"/><text x="140" y="198" text-anchor="middle" style="fill:var(--surface);font-weight:700">Acetilcolina</text>'+
+'<rect x="460" y="170" width="80" height="30" rx="8" style="fill:var(--surface);stroke:var(--c);stroke-width:2"/><text x="500" y="190" text-anchor="middle" style="fill:var(--c);font-weight:700">DA</text></g>'+
+'<text x="470" y="60" style="fill:var(--ink);font-weight:700">↑ Dopamina:</text><text x="470" y="78" style="fill:var(--muted)">levodopa, agonistas,</text><text x="470" y="96" style="fill:var(--muted)">IMAO-B, amantadina</text>'+
+'<text x="30" y="60" style="fill:var(--ink);font-weight:700">↓ Acetilcolina:</text><text x="30" y="78" style="fill:var(--muted)">anticolinérgicos</text><text x="30" y="96" style="fill:var(--muted)">(trihexifenidilo, biperideno)</text></svg>'},
+
+cox: {cap:"La cascada del ácido araquidónico. Los corticoides frenan el primer paso (fosfolipasa A₂, a través de la lipocortina); los AINE bloquean la COX. Bloquear la COX-2 alivia; bloquear la COX-1 produce las RAM.",
+svg:'<svg viewBox="0 0 680 320" role="img" aria-label="Cascada del ácido araquidónico con COX-1 y COX-2" style="'+S+'">'+
+'<rect x="250" y="10" width="180" height="36" rx="8" style="fill:var(--soft);stroke:var(--line)"/><text x="340" y="33" text-anchor="middle" style="fill:var(--ink)">Fosfolípidos de membrana</text>'+
+'<line x1="340" y1="46" x2="340" y2="86" style="stroke:var(--muted);stroke-width:2"/><text x="352" y="70" style="fill:var(--muted)">fosfolipasa A₂</text>'+
+'<rect x="460" y="52" width="200" height="32" rx="8" style="fill:var(--warn-bg);stroke:var(--warn)"/><text x="560" y="73" text-anchor="middle" style="fill:var(--warn);font-weight:700">✕ Corticoides (lipocortina)</text>'+
+'<rect x="250" y="88" width="180" height="36" rx="8" style="fill:var(--soft);stroke:var(--line)"/><text x="340" y="111" text-anchor="middle" style="fill:var(--ink);font-weight:700">Ácido araquidónico</text>'+
+'<line x1="300" y1="124" x2="150" y2="170" style="stroke:var(--muted);stroke-width:2"/><line x1="340" y1="124" x2="340" y2="170" style="stroke:var(--muted);stroke-width:2"/><line x1="390" y1="124" x2="560" y2="170" style="stroke:var(--muted);stroke-width:2"/>'+
+'<rect x="60" y="170" width="180" height="40" rx="8" style="fill:var(--surface);stroke:var(--ink);stroke-width:2"/><text x="150" y="195" text-anchor="middle" style="fill:var(--ink);font-weight:700">COX-1 (mantenimiento)</text>'+
+'<rect x="255" y="170" width="170" height="40" rx="8" style="fill:var(--c)"/><text x="340" y="195" text-anchor="middle" style="fill:var(--surface);font-weight:700">COX-2 (bomberos)</text>'+
+'<rect x="470" y="170" width="180" height="40" rx="8" style="fill:var(--surface);stroke:var(--line)"/><text x="560" y="195" text-anchor="middle" style="fill:var(--ink)">Lipooxigenasa</text>'+
+'<text x="150" y="235" text-anchor="middle" style="fill:var(--muted)">protege el estómago</text><text x="150" y="253" text-anchor="middle" style="fill:var(--muted)">mantiene el flujo renal</text><text x="150" y="271" text-anchor="middle" style="fill:var(--muted)">tromboxano: agrega plaquetas</text>'+
+'<text x="340" y="235" text-anchor="middle" style="fill:var(--muted)">inflamación</text><text x="340" y="253" text-anchor="middle" style="fill:var(--muted)">dolor</text><text x="340" y="271" text-anchor="middle" style="fill:var(--muted)">fiebre</text>'+
+'<text x="560" y="235" text-anchor="middle" style="fill:var(--muted)">leucotrienos:</text><text x="560" y="253" text-anchor="middle" style="fill:var(--muted)">broncoconstricción</text>'+
+'<rect x="60" y="284" width="365" height="30" rx="8" style="fill:var(--warn-bg);stroke:var(--warn)"/><text x="242" y="304" text-anchor="middle" style="fill:var(--warn);font-weight:700">✕ AINE: bloquean la COX</text></svg>'},
+
+escalera: {cap:"La escalera analgésica de la OMS. Se sube según la intensidad del dolor, se puede entrar directamente en el escalón que corresponda y en todos caben los coadyuvantes.",
+svg:'<svg viewBox="0 0 660 290" role="img" aria-label="Escalera analgésica de la OMS" style="'+S+'">'+
+'<rect x="20" y="200" width="200" height="80" style="fill:var(--c);opacity:.35"/><rect x="230" y="125" width="200" height="155" style="fill:var(--c);opacity:.6"/><rect x="440" y="50" width="200" height="230" style="fill:var(--c)"/>'+
+'<text x="120" y="190" text-anchor="middle" style="fill:var(--ink);font-weight:700;font-family:var(--display);font-size:15px">1. Dolor leve</text><text x="120" y="232" text-anchor="middle" style="fill:var(--ink)">Paracetamol, AINE,</text><text x="120" y="250" text-anchor="middle" style="fill:var(--ink)">metamizol</text>'+
+'<text x="330" y="115" text-anchor="middle" style="fill:var(--ink);font-weight:700;font-family:var(--display);font-size:15px">2. Dolor moderado</text><text x="330" y="160" text-anchor="middle" style="fill:var(--surface)">Opioide menor</text><text x="330" y="178" text-anchor="middle" style="fill:var(--surface)">(tramadol, codeína)</text><text x="330" y="200" text-anchor="middle" style="fill:var(--surface)">± escalón 1</text>'+
+'<text x="540" y="40" text-anchor="middle" style="fill:var(--ink);font-weight:700;font-family:var(--display);font-size:15px">3. Dolor intenso</text><text x="540" y="90" text-anchor="middle" style="fill:var(--surface)">Opioide mayor</text><text x="540" y="108" text-anchor="middle" style="fill:var(--surface)">(morfina, fentanilo,</text><text x="540" y="126" text-anchor="middle" style="fill:var(--surface)">oxicodona) ± escalón 1</text>'+
+'<text x="330" y="272" text-anchor="middle" style="fill:var(--ink)">Coadyuvantes en cualquier escalón: antidepresivos, antiepilépticos, corticoides</text></svg>'}
+};
+
+var TEMAS = {};
+
+TEMAS[1] = {t:"Introducción a la farmacología", conceptos:true,
+idea:"Un medicamento es mucho más que su principio activo: tiene excipientes, un nombre, una forma farmacéutica, una vía de administración y unas condiciones de dispensación que condicionan cómo se usa.",
+claves:[
+"**Fármaco** es toda sustancia que modifica una función del organismo; **medicamento** es la que se usa para prevenir, diagnosticar o tratar, y está formada por **principio activo + excipientes**.",
+"Usa siempre el **nombre genérico (DCI)**: es universal, no cambia con la marca y sus terminaciones orientan sobre el grupo: -olol, -pril, -sartán, -azepam, -prazol.",
+"Las siglas del envase dicen cómo se puede usar: **H** uso hospitalario, **DH** diagnóstico hospitalario, **ECM** especial control médico, **TLD** tratamiento de larga duración, **EFP** sin receta y publicitario.",
+"De miles de moléculas candidatas llega al mercado una. La **fase IV** (farmacovigilancia) empieza cuando el medicamento ya se vende.",
+"La **vía de administración** decide la rapidez, la biodisponibilidad y el riesgo: la intravenosa es la más rápida y la que menos errores perdona."],
+grupos:[
+{n:"Tipos de medicamentos", mec:"Según cómo se elaboran: **fórmula magistral** (preparada para un paciente concreto por prescripción), **preparado oficinal** (elaborado según el Formulario Nacional) y **especialidad farmacéutica** (fabricada industrialmente y registrada).", ej:["Fórmula magistral","Preparado oficinal","Especialidad farmacéutica","Medicamento genérico (EFG)"], clave:"Un genérico (EFG) tiene el mismo principio activo, dosis y forma que el original y ha demostrado **bioequivalencia**."},
+{n:"Nomenclatura", mec:"Un mismo fármaco tiene tres nombres: **químico** (describe la molécula), **genérico o DCI** (internacional) y **comercial** (la marca, con ®).", ej:["-olol: betabloqueantes","-pril: IECA","-sartán: ARA II","-azepam: benzodiacepinas","-prazol: IBP","-mab: anticuerpos monoclonales"], clave:"Las terminaciones de la DCI son una pista, no una regla absoluta, pero ayudan mucho a reconocer el grupo."},
+{n:"Condiciones de dispensación", mec:"Siglas y símbolos del envase que indican quién puede prescribir y dónde se dispensa.", ej:["H: uso hospitalario","DH: diagnóstico hospitalario","ECM: especial control médico","TLD: larga duración","EFP: publicitario","Estupefacientes y psicótropos"], clave:"Las siglas no son decoración: un medicamento **H** no se dispensa en una farmacia comunitaria."},
+{n:"Desarrollo de un medicamento", mec:"Embudo de años de investigación: **preclínica** (laboratorio y animales) y ensayos clínicos en humanos.", ej:["Fase I: voluntarios sanos, seguridad","Fase II: pocos pacientes, dosis y eficacia","Fase III: miles de pacientes, comparación","Fase IV: poscomercialización"], clave:"Las RAM raras (1 de cada 10.000 o menos) suelen descubrirse en **fase IV**: por eso la notificación es tan importante.", alerta:"El triángulo negro invertido ▼ indica un medicamento sujeto a **seguimiento adicional**: cualquier sospecha de RAM debe notificarse."},
+{n:"Vías de administración", mec:"**Enterales** (oral, sublingual, rectal), **parenterales** (intravenosa, intramuscular, subcutánea, intradérmica...) y **tópicas** (cutánea, oftálmica, inhalatoria...).", ej:["Oral","Sublingual","Rectal","Intravenosa","Intramuscular","Subcutánea","Inhalatoria","Transdérmica"], clave:"La sublingual y la rectal evitan en gran parte el **efecto de primer paso** hepático; la intravenosa tiene biodisponibilidad del 100 %."}],
+alertas:["Antes de administrar, comprueba principio activo, dosis, vía, paciente y hora. Las presentaciones con nombres o envases parecidos son una causa frecuente de errores.","No partas ni tritures formas de liberación modificada (retard, entéricas) sin comprobarlo: puedes provocar una sobredosis o anular el efecto."],
+quiz:[
+{q:"¿Qué es un excipiente?", o:["El componente que produce el efecto terapéutico","La sustancia sin acción farmacológica que da forma, estabilidad o sabor al medicamento","El nombre comercial del medicamento","Un fármaco en fase de investigación"], c:1, e:"El excipiente no busca un efecto terapéutico, aunque puede causar problemas (alergias, intolerancias): por eso algunos se declaran obligatoriamente."},
+{q:"La sigla **DH** en un envase significa que el medicamento:", o:["Solo puede administrarse en el hospital","Requiere diagnóstico hospitalario, aunque se dispense en farmacia comunitaria","Es de dispensación sin receta","Es un estupefaciente"], c:1, e:"DH: el diagnóstico y la prescripción inicial se hacen en el hospital, pero el paciente puede recogerlo en la farmacia. H es el de uso exclusivamente hospitalario."},
+{q:"¿En qué fase del desarrollo es más probable detectar por primera vez una RAM muy rara?", o:["Fase preclínica","Fase I","Fase III","Fase IV"], c:3, e:"Los ensayos de fase III incluyen miles de pacientes, demasiado pocos para RAM de 1 por 10.000 o más rara. Aparecen cuando el fármaco lo toman millones: fase IV."},
+{q:"Un fármaco cuyo nombre termina en «-sartán» probablemente es:", o:["Un betabloqueante","Un inhibidor de la bomba de protones","Un antagonista del receptor de angiotensina II","Una benzodiacepina"], c:2, e:"Losartán, valsartán, candesartán: ARA II. -olol son betabloqueantes, -prazol IBP y -azepam benzodiacepinas."}]};
+
+TEMAS[2] = {t:"Farmacocinética y farmacodinámica", conceptos:true, fig:"curva", fig2:"potencia",
+idea:"La farmacocinética es lo que el cuerpo hace con el fármaco (absorberlo, distribuirlo, metabolizarlo y eliminarlo); la farmacodinámica es lo que el fármaco hace con el cuerpo.",
+claves:[
+"**ADME**: absorción, distribución, metabolismo y excreción. Cada paso explica una interacción o una RAM.",
+"La **biodisponibilidad** es la fracción de la dosis que llega inalterada a la circulación: 100 % por vía intravenosa, menos por vía oral por absorción incompleta y **efecto de primer paso**.",
+"Solo la forma **no ionizada** y liposoluble atraviesa membranas. Un ácido débil se absorbe mejor en medio ácido; para eliminarlo, se **alcaliniza la orina**.",
+"Solo el fármaco **libre** (no unido a proteínas) actúa y se elimina. Si otro fármaco lo desplaza de la albúmina, su efecto aumenta (warfarina).",
+"El **estado estacionario** se alcanza en unas **4-5 semividas**; tras suspender, se tarda lo mismo en eliminar el fármaco.",
+"**Eficacia** es el efecto máximo; **potencia**, la dosis necesaria (DE₅₀). Un fármaco con **índice terapéutico estrecho** (digoxina, litio, warfarina, fenitoína) exige vigilar niveles y dosis."],
+grupos:[
+{n:"Absorción y primer paso", mec:"Paso del fármaco desde el lugar de administración a la sangre. Por vía oral, pasa primero por el hígado a través de la vena porta.", ej:["Nitroglicerina sublingual","Morfina oral frente a intravenosa","Lidocaína (no se da por vía oral)"], clave:"Un fármaco con gran primer paso necesita dosis orales mucho mayores que intravenosas, o una vía que lo evite (sublingual, rectal, transdérmica)."},
+{n:"Distribución y volumen de distribución", mec:"Reparto del fármaco por el organismo. El **Vd** relaciona la dosis con la concentración plasmática: un Vd grande indica que el fármaco se acumula en los tejidos.", ej:["Albúmina: fármacos ácidos","Barrera hematoencefálica","Barrera placentaria"], clave:"El Vd sirve para calcular la **dosis de carga**. La hipoalbuminemia (desnutrición, cirrosis) aumenta la fracción libre y el riesgo de toxicidad."},
+{n:"Metabolismo hepático", mec:"**Fase I**: oxidación, reducción, hidrólisis, sobre todo por el **citocromo P450**. **Fase II**: conjugación (glucuronidación, glutatión...) que hace la molécula más hidrosoluble.", ej:["Inductores: rifampicina, carbamazepina, hipérico","Inhibidores: claritromicina, fluconazol, pomelo","Paracetamol y glutatión"], clave:"Un **inductor** reduce los niveles del otro fármaco (fallo terapéutico); un **inhibidor** los aumenta (toxicidad). El paracetamol en sobredosis agota el glutatión: antídoto **N-acetilcisteína**."},
+{n:"Excreción", mec:"Sobre todo **renal** (filtración, secreción y reabsorción), también biliar, pulmonar y por la leche materna.", ej:["Litio","Digoxina","Aminoglucósidos","Metformina"], clave:"En la insuficiencia renal y en el anciano, los fármacos de eliminación renal se acumulan: hay que ajustar la dosis según la función renal."},
+{n:"Semivida y dosificación", mec:"La **semivida (t½)** es el tiempo en que la concentración plasmática se reduce a la mitad. Determina el intervalo entre dosis.", ej:["Estado estacionario: 4-5 t½","Dosis de carga","Dosis de mantenimiento"], clave:"Si un fármaco de semivida larga necesita efecto rápido, se empieza con una **dosis de carga**."},
+{n:"Dianas y receptores", mec:"Los fármacos actúan sobre cuatro dianas: **receptores**, **enzimas**, **canales iónicos** y **transportadores**.", ej:["Receptor: salbutamol (β2)","Enzima: enalapril (ECA)","Canal: amlodipino (calcio)","Transportador: furosemida, ISRS"], clave:"Los receptores pueden ser canales iónicos, acoplados a proteína G, con actividad enzimática o nucleares (corticoides)."},
+{n:"Agonistas y antagonistas", mec:"El **agonista** se une y activa el receptor (afinidad + actividad intrínseca); el **antagonista** se une pero no lo activa.", ej:["Agonista puro: morfina","Agonista parcial: buprenorfina","Antagonista competitivo: naloxona","Antagonista no competitivo"], clave:"El antagonista **competitivo** desplaza la curva a la derecha (se supera con más agonista); el **no competitivo** reduce el efecto máximo."}],
+alertas:["En pacientes con fármacos de **margen estrecho** (digoxina, litio, warfarina, fenitoína, aminoglucósidos), cualquier fármaco nuevo es una posible interacción: compruébalo.","El zumo de pomelo inhibe el CYP3A4 intestinal: puede aumentar los niveles de algunas estatinas, antagonistas del calcio o inmunosupresores."],
+enlaces:"Seminario de cálculo y farmacocinética; seminario de interacciones.",
+quiz:[
+{q:"Un fármaco tiene una biodisponibilidad oral del 25 %. Si por vía intravenosa la dosis es de 50 mg, ¿qué dosis oral daría una exposición similar?", o:["12,5 mg","50 mg","100 mg","200 mg"], c:3, e:"Solo llega a la circulación un 25 % de lo que se toma por boca: 200 mg × 0,25 = 50 mg disponibles."},
+{q:"¿Por qué se alcaliniza la orina en una intoxicación por salicilatos?", o:["Para aumentar su absorción intestinal","Porque así el ácido débil se ioniza en el túbulo y no se reabsorbe","Para inhibir su metabolismo hepático","Para aumentar su unión a proteínas"], c:1, e:"En medio alcalino, un ácido débil está ionizado, no atraviesa la membrana tubular y queda atrapado en la orina."},
+{q:"Un paciente estable con warfarina empieza a tomar un fármaco que la desplaza de la albúmina. ¿Qué cabe esperar?", o:["Menor efecto anticoagulante","Mayor fracción libre y mayor riesgo de sangrado","Ningún cambio, porque la dosis es la misma","Mayor eliminación renal sin cambio de efecto"], c:1, e:"Solo actúa el fármaco libre. Si aumenta la fracción libre de un fármaco de margen estrecho, aumenta su efecto: riesgo hemorrágico."},
+{q:"El fármaco A alcanza un efecto máximo del 100 % con una DE₅₀ de 10 mg; el B, un 60 % con una DE₅₀ de 1 mg. Es correcto que:", o:["A es más potente y más eficaz","B es más potente, pero A es más eficaz","B es más potente y más eficaz","Ambos tienen la misma eficacia"], c:1, e:"Potencia = menor dosis para el 50 % del efecto (B). Eficacia = mayor efecto máximo (A)."},
+{q:"¿Cuánto tarda aproximadamente un fármaco en alcanzar el estado estacionario con dosis repetidas?", o:["Una semivida","Dos semividas","Cuatro o cinco semividas","Diez semividas"], c:2, e:"Tras 4-5 semividas se alcanza más del 94-97 % del estado estacionario. Por eso, en fármacos de semivida larga, se usa una dosis de carga."}]};
+
+TEMAS[3] = {t:"Reacciones adversas a los medicamentos", conceptos:true, fig:"ram",
+idea:"Una reacción adversa es cualquier respuesta nociva y no intencionada a un medicamento. Detectarla y notificarla es una obligación legal de los profesionales sanitarios.",
+claves:[
+"La mayoría de las RAM son de **tipo A**: dependen de la dosis, son previsibles y se explican por el propio mecanismo del fármaco.",
+"Las de **tipo B** (alérgicas e idiosincrásicas) son impredecibles, no dependen de la dosis, son raras y graves, y obligan a **retirar el fármaco**.",
+"El **efecto colateral** aparece por el mismo mecanismo en otro órgano (sequedad de boca por un anticolinérgico); el **secundario** es consecuencia del efecto principal (hipopotasemia por un diurético).",
+"La **teratogenia** (tipo D) depende del momento: el periodo de organogénesis (semanas 3-8) es el más sensible. La talidomida cambió la farmacovigilancia mundial.",
+"Notificar es obligatorio para profesionales sanitarios e industria, y voluntario para la ciudadanía: **tarjeta amarilla** o notificaRAM.es."],
+grupos:[
+{n:"Tipo A: aumentada", mec:"Exageración del efecto farmacológico conocido. Frecuente, dosis-dependiente, baja mortalidad.", ej:["Hipoglucemia por insulina","Sangrado por anticoagulantes","Bradicardia por betabloqueantes","Sequedad de boca por anticolinérgicos"], clave:"Se maneja **ajustando la dosis**. Más frecuente en ancianos, insuficiencia renal o hepática e interacciones."},
+{n:"Tipo B: bizarra", mec:"No relacionada con la acción farmacológica. Dos formas: **alérgica** (inmunológica, requiere exposición previa) e **idiosincrásica** (determinada genéticamente).", ej:["Anafilaxia por penicilina","Hemólisis en el déficit de G6PD","Hipertermia maligna con anestésicos inhalatorios","Agranulocitosis por metamizol"], clave:"Imprevisible, independiente de la dosis, baja incidencia y alta gravedad: **retirar el fármaco** y no volver a administrarlo."},
+{n:"Tipos C, D, E y F", mec:"**C**: crónicas, por uso prolongado. **D**: diferidas (carcinogénesis, teratogénesis). **E**: al finalizar el tratamiento. **F**: fallo terapéutico.", ej:["C: Cushing por corticoides","D: focomelia por talidomida","E: rebote al retirar un betabloqueante","F: fallo del anticonceptivo con rifampicina"], clave:"Las de tipo E se previenen retirando de forma **gradual** (betabloqueantes, benzodiacepinas, corticoides, antiepilépticos)."},
+{n:"Fármacos a evitar en el embarazo", mec:"Algunos son teratógenos o dañan al feto en el segundo y tercer trimestre.", ej:["IECA y ARA II","Warfarina","Valproato","Isotretinoína","Tetraciclinas","AINE en el tercer trimestre"], clave:"Los AINE en el tercer trimestre pueden cerrar el **ductus arterioso** y reducir el líquido amniótico."},
+{n:"Farmacovigilancia", mec:"Detección, evaluación y prevención de las RAM una vez comercializado el medicamento. En España se integra en el Sistema Español de Farmacovigilancia (base de datos **FEDRA**).", ej:["Tarjeta amarilla","notificaRAM.es","Triángulo negro ▼","Algoritmo de Karch-Lasagna"], clave:"Basta la **sospecha** para notificar: no hace falta estar seguro de la relación causal."}],
+alertas:["Pregunta siempre por alergias previas y regístralas. Una alergia mal documentada es una RAM evitable.","Ante una RAM grave, no esperes a tener certeza: comunica la sospecha. Sobre todo si el medicamento lleva el triángulo negro ▼ o la reacción no está descrita."],
+quiz:[
+{q:"La hipoglucemia por una dosis excesiva de insulina es una RAM de tipo:", o:["A","B","D","E"], c:0, e:"Es la exageración del efecto farmacológico conocido y depende de la dosis: tipo A."},
+{q:"¿Qué característica corresponde a una RAM de tipo B?", o:["Es frecuente y previsible","Depende de la dosis","Es impredecible, rara y obliga a retirar el fármaco","Aparece al suspender el tratamiento"], c:2, e:"Las RAM tipo B (alérgicas e idiosincrásicas) no dependen de la dosis, son raras, graves e impredecibles."},
+{q:"La sequedad de boca que produce un anticolinérgico usado para la vejiga hiperactiva es un ejemplo de:", o:["Efecto secundario","Efecto colateral","Reacción idiosincrásica","Reacción alérgica"], c:1, e:"Es el mismo mecanismo (bloqueo muscarínico) actuando en otro órgano, la glándula salival: efecto colateral."},
+{q:"¿Para quién no es obligatoria la notificación de sospechas de RAM?", o:["Médicos y enfermeras","Farmacéuticos","Industria farmacéutica","Ciudadanía"], c:3, e:"Los profesionales sanitarios y la industria están obligados; los ciudadanos pueden notificar de forma voluntaria."},
+{q:"El rebote de taquicardia e hipertensión al suspender bruscamente un betabloqueante es una RAM de tipo:", o:["A","C","E","F"], c:2, e:"Tipo E: aparece al finalizar el tratamiento. Se previene retirando de forma gradual."}]};
+
+TEMAS[4] = {t:"Introducción al sistema nervioso autónomo", conceptos:true, fig:"sna", fig2:"cuadricula",
+idea:"Todo el bloque sigue el mismo orden: neurotransmisor, receptor, efecto fisiológico y fármaco. Si dominas los receptores, los fármacos se deducen.",
+claves:[
+"**Parasimpático**: acetilcolina sobre receptores **muscarínicos** del órgano. Reposo y digestión: bradicardia, miosis, secreciones, broncoconstricción, peristaltismo, micción.",
+"**Simpático**: noradrenalina sobre receptores **α y β**. Lucha o huida: taquicardia, midriasis, broncodilatación, glucemia alta.",
+"En **todos los ganglios** y en la **placa motora**, el receptor es **nicotínico**.",
+"**β1 = un corazón, β2 = dos pulmones**: β1 acelera y refuerza el corazón; β2 relaja el bronquio, el útero y la vejiga.",
+"La acetilcolinesterasa destruye la acetilcolina en menos de un milisegundo: inhibirla prolonga y generaliza el efecto colinérgico.",
+"Las glándulas sudoríparas son simpáticas pero **colinérgicas** (M3): los anticolinérgicos quitan el sudor."],
+grupos:[
+{n:"Receptores muscarínicos", sub:"Acetilcolina, parasimpático", mec:"**M2** en el corazón: frena (bradicardia, bloqueo AV). **M3** en músculo liso y glándulas: contrae y secreta.", ej:["M2: corazón","M3: bronquio, intestino, vejiga","M3: pupila (miosis)","M3: glándulas salivales, lagrimales y sudoríparas"], clave:"Síndrome colinérgico, **DUMBELS**: diarrea, urinación, miosis, broncorrea y broncoespasmo, emesis, lagrimeo, salivación y sudoración."},
+{n:"Receptores nicotínicos", sub:"Acetilcolina, ganglios y músculo", mec:"Canales iónicos en los **ganglios autónomos** (simpáticos y parasimpáticos), la médula suprarrenal y la **placa motora**.", ej:["Ganglios autónomos","Médula suprarrenal","Placa motora del músculo esquelético"], clave:"Los bloqueantes neuromusculares (Tema 12) son antagonistas nicotínicos de la placa motora."},
+{n:"Receptores α", sub:"Noradrenalina, simpático", mec:"**α1** contrae: vasos (piel, vísceras), esfínteres, músculo radial del iris (midriasis). **α2** presináptico: frena la liberación de noradrenalina; en el páncreas reduce la insulina.", ej:["α1: vasoconstricción","α1: esfínter vesical","α2: freno presináptico"], clave:"Agonista α1 = sube la tensión; antagonista α1 = la baja y relaja la próstata."},
+{n:"Receptores β", sub:"Noradrenalina y adrenalina", mec:"**β1**: corazón (frecuencia y fuerza) y riñón (renina). **β2**: relaja el bronquio, el útero, la vejiga y dilata los vasos del músculo. **β3**: lipólisis y relajación del detrusor.", ej:["β1: corazón","β2: bronquio","β2: útero","β3: tejido adiposo y vejiga"], clave:"Un betabloqueante no selectivo puede producir broncoespasmo en un asmático porque también bloquea β2."}],
+alertas:["El simpático sube la glucemia y sus síntomas (temblor, taquicardia, sudor) avisan de la hipoglucemia. Un diabético con betabloqueante se recupera peor y la nota menos.","Síndrome anticolinérgico: «seco como un hueso, rojo como una remolacha, ciego como un topo, loco como una cabra y caliente como un horno», con taquicardia y retención urinaria."],
+quiz:[
+{q:"¿Qué receptor media la bradicardia por estimulación parasimpática?", o:["M1","M2","M3","Nicotínico"], c:1, e:"El receptor M2 del nodo sinusal y AV frena el corazón."},
+{q:"¿Cuál es el receptor de la acetilcolina en los ganglios simpáticos?", o:["Muscarínico M3","α1","Nicotínico","β1"], c:2, e:"En todos los ganglios autónomos, simpáticos y parasimpáticos, la acetilcolina actúa sobre receptores nicotínicos."},
+{q:"La broncodilatación simpática se debe a la activación de receptores:", o:["α1","α2","β1","β2"], c:3, e:"β2 relaja el músculo liso bronquial: «dos pulmones»."},
+{q:"¿Por qué un anticolinérgico reduce la sudoración si las glándulas sudoríparas están inervadas por el simpático?", o:["Porque bloquea los receptores α1 de la glándula","Porque la fibra simpática de la glándula libera acetilcolina sobre receptores M3","Porque reduce la temperatura corporal","Porque bloquea los ganglios simpáticos"], c:1, e:"Es la excepción del sistema: inervación simpática colinérgica muscarínica (M3)."},
+{q:"El síntoma «DUMBELS» describe:", o:["El síndrome anticolinérgico","El síndrome colinérgico","La crisis hipertensiva","El síndrome serotoninérgico"], c:1, e:"Diarrea, urinación, miosis, broncorrea, emesis, lagrimeo, salivación: exceso de acetilcolina, por ejemplo en una intoxicación por organofosforados."}]};
+
+TEMAS[5] = {t:"Fármacos parasimpaticomiméticos",
+idea:"Imitan al parasimpático de dos formas: activando directamente el receptor muscarínico o frenando la enzima que destruye la acetilcolina.",
+claves:[
+"**Directos**: agonistas muscarínicos poco selectivos; se usan sobre todo por vía tópica (pilocarpina en colirio) o para la retención urinaria (betanecol).",
+"**Indirectos o anticolinesterásicos**: aumentan la acetilcolina en todas las sinapsis, también en la placa motora y, si atraviesan la barrera, en el cerebro.",
+"La **neostigmina** y la **piridostigmina** no entran en el cerebro (cuaternarias); la **fisostigmina** sí, por eso es el antídoto de la intoxicación anticolinérgica.",
+"Los anticolinesterásicos de acción central (**donepezilo, rivastigmina, galantamina**) se usan en el Alzheimer.",
+"Los **organofosforados** (insecticidas, gases nerviosos) inhiben la enzima de forma irreversible: atropina y pralidoxima."],
+grupos:[
+{n:"Agonistas muscarínicos directos", mec:"Activan los receptores muscarínicos imitando a la acetilcolina.", ej:["Pilocarpina","Betanecol","Carbacol"], clave:"Pilocarpina: glaucoma (miosis que abre la salida del humor acuoso) y sequedad de boca. Betanecol: retención urinaria no obstructiva.", alerta:"Contraindicados en asma, bradicardia, obstrucción urinaria o intestinal y úlcera péptica."},
+{n:"Anticolinesterásicos reversibles periféricos", mec:"Inhiben la acetilcolinesterasa; no atraviesan la barrera hematoencefálica.", ej:["Neostigmina","Piridostigmina","Edrofonio"], clave:"Miastenia gravis (piridostigmina) y reversión del bloqueo neuromuscular no despolarizante tras la cirugía (neostigmina, junto con atropina para frenar el efecto muscarínico)."},
+{n:"Anticolinesterásicos centrales", mec:"Atraviesan la barrera y aumentan la acetilcolina cerebral.", ej:["Donepezilo","Rivastigmina","Galantamina","Fisostigmina"], clave:"Alzheimer leve-moderado: mejoría modesta de la cognición. RAM: náuseas, diarrea, **bradicardia** y síncope. La rivastigmina existe en parche.", alerta:"En un anciano con donepezilo, vigila la frecuencia cardiaca y las caídas, sobre todo si también toma betabloqueantes."},
+{n:"Anticolinesterásicos irreversibles", mec:"Fosforilan la enzima de forma permanente.", ej:["Organofosforados (insecticidas)","Gases nerviosos (sarín)"], clave:"Intoxicación: síndrome colinérgico muscarínico (DUMBELS), nicotínico (fasciculaciones, debilidad) y central. Tratamiento: **atropina** a dosis altas y **pralidoxima** precoz."}],
+alertas:["Signos de exceso colinérgico: bradicardia, broncoespasmo, sudoración, salivación, diarrea y calambres abdominales.","En la intoxicación por organofosforados, protégete: la ropa y la piel del paciente están contaminadas."],
+enlaces:"Tema 6 (atropina como antídoto) y Tema 12 (reversión del bloqueo neuromuscular).",
+quiz:[
+{q:"¿Por qué la fisostigmina sirve como antídoto de una intoxicación anticolinérgica con delirio y la neostigmina no?", o:["Porque la fisostigmina es irreversible","Porque la fisostigmina atraviesa la barrera hematoencefálica","Porque la neostigmina es un agonista directo","Porque la neostigmina solo actúa en el corazón"], c:1, e:"La neostigmina es una amina cuaternaria que no entra en el cerebro; la fisostigmina sí puede revertir el delirio central."},
+{q:"¿Qué fármaco se usa en la miastenia gravis?", o:["Piridostigmina","Atropina","Pilocarpina","Pralidoxima"], c:0, e:"La piridostigmina aumenta la acetilcolina en la placa motora y mejora la fuerza muscular."},
+{q:"¿Cuál de estos efectos es esperable con donepezilo?", o:["Taquicardia y estreñimiento","Bradicardia y diarrea","Retención urinaria y sequedad de boca","Midriasis"], c:1, e:"Al aumentar la acetilcolina predominan los efectos muscarínicos: bradicardia, náuseas, diarrea."},
+{q:"El tratamiento de una intoxicación por un insecticida organofosforado incluye:", o:["Neostigmina y fisostigmina","Atropina y pralidoxima","Adrenalina y naloxona","Flumazenilo"], c:1, e:"La atropina bloquea el exceso muscarínico y la pralidoxima reactiva la enzima si se da pronto."}]};
+
+TEMAS[6] = {t:"Fármacos parasimpaticolíticos",
+idea:"Bloquean los receptores muscarínicos. No hace falta memorizar sus efectos: son exactamente los contrarios a los del parasimpático.",
+claves:[
+"Son **antagonistas competitivos muscarínicos**: midriasis en lugar de miosis, taquicardia en lugar de bradicardia, sequedad en lugar de secreción, retención en lugar de micción.",
+"La **atropina** se usa en la bradicardia sintomática, en la preanestesia y en la intoxicación por organofosforados.",
+"La **butilescopolamina** no atraviesa la barrera: espasmolítico abdominal sin efectos centrales. La **escopolamina** sí: cinetosis.",
+"Por vía inhalada (**ipratropio, tiotropio**) son broncodilatadores en la EPOC; en el ojo (**tropicamida**), midriáticos para explorar.",
+"En ancianos, la **carga anticolinérgica** acumulada produce confusión, caídas, estreñimiento y retención urinaria."],
+grupos:[
+{n:"Atropina", mec:"Antagonista muscarínico no selectivo.", ej:["Atropina"], clave:"Bradicardia sintomática, preanestesia (reduce secreciones), antídoto de organofosforados y de setas muscarínicas.", alerta:"Puede desencadenar un glaucoma agudo de ángulo cerrado y retención urinaria en la hiperplasia de próstata."},
+{n:"Escopolamina y butilescopolamina", mec:"La escopolamina actúa en el SNC; la butilescopolamina (cuaternaria) solo en la periferia.", ej:["Escopolamina","Butilescopolamina"], clave:"Escopolamina en parche: cinetosis. Butilescopolamina: cólico biliar, renal o intestinal."},
+{n:"Antimuscarínicos inhalados", mec:"Bloquean el tono vagal broncoconstrictor.", ej:["Ipratropio","Tiotropio","Glicopirronio","Umeclidinio"], clave:"Ipratropio: acción corta (crisis, junto a salbutamol). Tiotropio: acción larga, una vez al día, mantenimiento de la EPOC."},
+{n:"Antimuscarínicos urinarios", mec:"Relajan el detrusor de la vejiga.", ej:["Oxibutinina","Tolterodina","Solifenacina","Fesoterodina"], clave:"Vejiga hiperactiva e incontinencia de urgencia. RAM: sequedad de boca, estreñimiento, visión borrosa; la oxibutinina puede producir confusión en ancianos."},
+{n:"Antimuscarínicos oftálmicos", mec:"Producen midriasis y cicloplejía (parálisis de la acomodación).", ej:["Tropicamida","Ciclopentolato","Atropina colirio"], clave:"Exploración del fondo de ojo. Tras la prueba, el paciente verá borroso y le molestará la luz: no debe conducir."}],
+alertas:["Síndrome anticolinérgico: piel seca y roja, midriasis, fiebre, confusión, taquicardia, retención urinaria e íleo. Antídoto: fisostigmina en casos graves.","Revisa la carga anticolinérgica en ancianos: antihistamínicos de primera generación, tricíclicos, antimuscarínicos urinarios, antipsicóticos... se suman."],
+quiz:[
+{q:"¿Qué efecto NO esperarías con atropina?", o:["Midriasis","Taquicardia","Sequedad de boca","Miosis"], c:3, e:"La atropina bloquea el parasimpático: produce midriasis, no miosis."},
+{q:"Para un cólico renal sin efectos sobre el SNC, el antimuscarínico más adecuado es:", o:["Escopolamina","Butilescopolamina","Atropina","Tiotropio"], c:1, e:"La butilescopolamina es cuaternaria: no atraviesa la barrera hematoencefálica."},
+{q:"¿En qué paciente debe usarse con precaución un antimuscarínico?", o:["Hombre de 75 años con hiperplasia benigna de próstata","Joven con diarrea del viajero","Paciente con sialorrea","Paciente con bradicardia sinusal"], c:0, e:"El bloqueo muscarínico relaja el detrusor y puede precipitar una retención urinaria aguda en la hiperplasia de próstata."},
+{q:"El tiotropio se usa principalmente en:", o:["La crisis asmática grave","El mantenimiento de la EPOC","La vejiga hiperactiva","El glaucoma"], c:1, e:"Es un antimuscarínico inhalado de acción larga, pilar del mantenimiento de la EPOC."}]};
+
+TEMAS[7] = {t:"Fármacos simpaticomiméticos",
+idea:"Imitan al simpático activando receptores α, β o ambos. Su utilidad y sus riesgos dependen de qué receptor encienden.",
+claves:[
+"**α1** (fenilefrina, oximetazolina): vasoconstricción. Descongestionantes nasales, nunca más de **3-5 días** por la rinitis medicamentosa.",
+"**β1** (dobutamina): aumenta la fuerza del corazón en el shock cardiogénico.",
+"**β2** de acción corta (salbutamol): rescate en el asma. De acción larga (salmeterol, formoterol): mantenimiento, **nunca solos en el asma**.",
+"**Adrenalina** (α + β): fármaco de la anafilaxia por vía **intramuscular** en el muslo, y de la parada cardiaca por vía intravenosa.",
+"**Noradrenalina**: vasopresor del shock; por vía central, porque la extravasación produce necrosis."],
+grupos:[
+{n:"Agonistas α1", mec:"Contraen el músculo liso vascular.", ej:["Fenilefrina","Oximetazolina","Xilometazolina","Nafazolina"], clave:"Descongestionantes nasales y oftálmicos; midriático (fenilefrina colirio). Por vía sistémica, vasopresor.", alerta:"Rinitis medicamentosa con el uso prolongado: rebote de congestión al suspender. Máximo 3-5 días."},
+{n:"Agonistas α2", mec:"Activan el freno presináptico central y reducen el tono simpático.", ej:["Clonidina","Brimonidina","Dexmedetomidina"], clave:"Clonidina: antihipertensivo central (rebote si se suspende bruscamente). Brimonidina: glaucoma. Dexmedetomidina: sedación en UCI."},
+{n:"Agonistas β1", mec:"Aumentan la contractilidad y la frecuencia cardiaca.", ej:["Dobutamina"], clave:"Shock cardiogénico y bajo gasto. Perfusión continua con monitorización: taquicardia y arritmias."},
+{n:"Agonistas β2", mec:"Relajan el músculo liso bronquial (y uterino).", ej:["Salbutamol","Terbutalina","Salmeterol","Formoterol"], clave:"Acción corta: rescate. Acción larga: mantenimiento, siempre con un corticoide inhalado en el asma. RAM: temblor, taquicardia, **hipopotasemia**.", alerta:"Un asmático que usa el inhalador de rescate más de dos veces por semana tiene el asma mal controlada."},
+{n:"Agonistas mixtos", mec:"Actúan sobre α y β (directos) o liberan noradrenalina (indirectos).", ej:["Adrenalina","Noradrenalina","Dopamina","Efedrina","Pseudoefedrina"], clave:"Adrenalina IM (ampolla 1 mg/mL): anafilaxia, 0,5 mg en el adulto en la cara externa del muslo. Noradrenalina: shock séptico. Pseudoefedrina: descongestionante oral, sube la tensión.", alerta:"Si se extravasa noradrenalina o dopamina: necrosis local. Antídoto: **fentolamina** infiltrada."}],
+alertas:["Confundir la ampolla de adrenalina 1:1000 (para vía IM) con la dilución intravenosa es un error grave y documentado.","Los descongestionantes con pseudoefedrina (antigripales) suben la tensión: precaución en hipertensos y cardiópatas."],
+quiz:[
+{q:"¿Cuál es la vía de elección de la adrenalina en una anafilaxia fuera de una parada cardiaca?", o:["Intravenosa en bolo","Intramuscular en la cara externa del muslo","Subcutánea en el brazo","Inhalada"], c:1, e:"La vía intramuscular en el muslo consigue niveles rápidos y es la más segura fuera de una parada."},
+{q:"Un paciente usa oximetazolina nasal desde hace dos meses y cada vez está más congestionado. ¿Qué ocurre?", o:["Alergia al fármaco","Rinitis medicamentosa por efecto rebote","Infección por el aplicador","Tolerancia a los corticoides"], c:1, e:"El uso prolongado de vasoconstrictores α1 produce congestión de rebote. Máximo 3-5 días."},
+{q:"¿Qué RAM es típica de dosis altas de salbutamol?", o:["Bradicardia","Hiperpotasemia","Temblor e hipopotasemia","Broncoespasmo"], c:2, e:"El β2 introduce potasio en las células y produce temblor y taquicardia."},
+{q:"En el asma, un β2 de acción larga (salmeterol, formoterol) debe usarse:", o:["Solo, como rescate","Siempre combinado con un corticoide inhalado","Únicamente por vía oral","Solo en niños"], c:1, e:"En monoterapia aumenta el riesgo de crisis graves; siempre con corticoide inhalado."}]};
+
+TEMAS[8] = {t:"Fármacos simpaticolíticos",
+idea:"Bloquean los receptores adrenérgicos. Los alfabloqueantes relajan vasos y próstata; los betabloqueantes frenan el corazón y protegen tras un infarto.",
+claves:[
+"**α1-bloqueantes**: doxazosina (hipertensión) y tamsulosina (hiperplasia benigna de próstata). Primera dosis al acostarse: **hipotensión ortostática**.",
+"**Betabloqueantes**: cardioselectivos β1 (atenolol, bisoprolol, metoprolol, nebivolol) y no selectivos (propranolol, timolol); carvedilol y labetalol bloquean también α1.",
+"Indicaciones: hipertensión, angina, arritmias, **insuficiencia cardiaca** (bisoprolol, carvedilol, metoprolol, nebivolol), posinfarto, migraña, temblor esencial y glaucoma (timolol).",
+"RAM: bradicardia, hipotensión, broncoespasmo (sobre todo los no selectivos), fatiga, frialdad de extremidades, y **enmascaran la hipoglucemia**.",
+"**Nunca se suspenden de golpe**: rebote con taquicardia, angina o infarto."],
+grupos:[
+{n:"Antagonistas α1", mec:"Bloquean la vasoconstricción α1 y relajan el músculo liso de la próstata y el cuello vesical.", ej:["Doxazosina","Prazosina","Tamsulosina","Silodosina","Alfuzosina"], clave:"Doxazosina: hipertensión. Tamsulosina y silodosina (uroselectivas): hiperplasia benigna de próstata.", alerta:"Hipotensión ortostática de primera dosis: tomarla al acostarse. Avisar al oftalmólogo antes de una cirugía de cataratas (síndrome del iris flácido con tamsulosina)."},
+{n:"Betabloqueantes cardioselectivos", mec:"Bloquean preferentemente β1: menos frecuencia, contractilidad y renina.", ej:["Atenolol","Bisoprolol","Metoprolol","Nebivolol"], clave:"Preferibles en asma o EPOC si un betabloqueante es necesario, aunque la selectividad se pierde a dosis altas."},
+{n:"Betabloqueantes no selectivos", mec:"Bloquean β1 y β2.", ej:["Propranolol","Timolol","Sotalol"], clave:"Propranolol: temblor esencial, migraña, síntomas somáticos de ansiedad, hipertiroidismo. Timolol colirio: glaucoma (puede absorberse y dar bradicardia).", alerta:"Contraindicados en el asma: broncoespasmo."},
+{n:"Bloqueantes α y β", mec:"Bloquean β y además α1 (vasodilatación).", ej:["Carvedilol","Labetalol"], clave:"Carvedilol: insuficiencia cardiaca e hipertensión. Labetalol: hipertensión del embarazo."}],
+alertas:["Antes de dar un betabloqueante, mide la frecuencia cardiaca y la tensión: si la frecuencia está por debajo de 50-55 lpm o hay hipotensión, consulta.","En un diabético con insulina y betabloqueante, enseña que la sudoración sigue avisando de la hipoglucemia aunque no note el temblor ni la taquicardia."],
+enlaces:"Bloque VIII: betabloqueantes como antiarrítmicos, antianginosos y antihipertensivos.",
+quiz:[
+{q:"¿Qué consejo darías a un paciente que empieza con doxazosina?", o:["Tomarla en ayunas por la mañana","Tomar la primera dosis al acostarse por el riesgo de hipotensión ortostática","Suspenderla si nota mareo, sin consultar","Tomarla con zumo de pomelo"], c:1, e:"El efecto de primera dosis puede producir mareo y síncope al levantarse."},
+{q:"¿Qué betabloqueante evitarías en un paciente asmático?", o:["Bisoprolol","Nebivolol","Propranolol","Metoprolol"], c:2, e:"El propranolol es no selectivo: bloquea β2 bronquiales y puede desencadenar broncoespasmo."},
+{q:"¿Por qué no debe suspenderse bruscamente un betabloqueante?", o:["Porque produce hipoglucemia","Por el rebote: taquicardia, hipertensión, angina o infarto","Porque produce broncoespasmo","Porque aparece una reacción alérgica"], c:1, e:"Los receptores β aumentan durante el tratamiento: al retirar el fármaco, la estimulación simpática es excesiva."},
+{q:"¿Cuál de estos fármacos está indicado en la hiperplasia benigna de próstata?", o:["Tamsulosina","Atenolol","Fenilefrina","Clonidina"], c:0, e:"La tamsulosina bloquea α1 de la próstata y el cuello vesical y mejora el flujo urinario."}]};
+
+TEMAS[9] = {t:"Histamina y antihistamínicos",
+idea:"La histamina es un mediador local, liberado sobre todo por mastocitos y basófilos. Sus efectos dependen del receptor: H1 pica, H2 quema, H3 despierta.",
+claves:[
+"Un **autacoide** actúa donde se produce y dura poco: es «gritarle al vecino», no enviar una carta por la sangre como una hormona.",
+"**H1**: picor, vasodilatación, aumento de la permeabilidad (habón, edema) y broncoconstricción. Es la base de la urticaria, la rinitis alérgica y parte de la anafilaxia.",
+"**H2**: secreción de ácido gástrico. **H3**: receptor presináptico del SNC que regula la vigilia.",
+"Los antihistamínicos de **primera generación** atraviesan la barrera y son anticolinérgicos: sedan. Los de **segunda generación** apenas entran en el cerebro.",
+"La anafilaxia se trata con **adrenalina intramuscular**. El antihistamínico es un complemento, nunca el tratamiento principal."],
+grupos:[
+{n:"Antihistamínicos H1 de primera generación", mec:"Bloquean H1 y además receptores muscarínicos, α y serotoninérgicos; atraviesan la barrera hematoencefálica.", ej:["Dexclorfeniramina","Difenhidramina","Hidroxizina","Doxilamina","Prometazina","Dimenhidrinato"], clave:"Útiles cuando interesa sedar o en la cinetosis; la doxilamina se vende como hipnótico y, con piridoxina, para los vómitos del embarazo.", alerta:"Somnolencia: no conducir. En ancianos, confusión, caídas y retención urinaria: evitarlos."},
+{n:"Antihistamínicos H1 de segunda generación", mec:"Bloqueo H1 selectivo, sin apenas paso al SNC ni efecto anticolinérgico.", ej:["Loratadina","Desloratadina","Cetirizina","Levocetirizina","Ebastina","Bilastina","Rupatadina","Fexofenadina"], clave:"Primera elección en la rinitis alérgica y la urticaria. La cetirizina puede sedar algo a dosis altas."},
+{n:"Antihistamínicos H2", mec:"Bloquean el receptor H2 de la célula parietal y reducen el ácido gástrico.", ej:["Famotidina","Cimetidina"], clave:"Hoy se usan menos que los IBP. La ranitidina se retiró en 2020. La cimetidina es inhibidora enzimática y puede producir ginecomastia."}],
+alertas:["En una reacción alérgica grave con dificultad respiratoria o hipotensión: adrenalina IM en el muslo, sin esperar a que haga efecto el antihistamínico.","Revisa los antigripales y los hipnóticos sin receta: muchos llevan antihistamínicos de primera generación."],
+quiz:[
+{q:"¿Qué receptor de la histamina media la secreción de ácido gástrico?", o:["H1","H2","H3","H4"], c:1, e:"H2 en la célula parietal: por eso la famotidina reduce el ácido."},
+{q:"¿Qué diferencia principal tienen los antihistamínicos de segunda generación respecto a los de primera?", o:["Son más potentes sobre H2","Apenas atraviesan la barrera hematoencefálica y no son anticolinérgicos","Se administran solo por vía intravenosa","Tratan la anafilaxia mejor que la adrenalina"], c:1, e:"La innovación fue aprender a no entrar en el cerebro, perdiendo la sedación y los efectos anticolinérgicos."},
+{q:"Ante una anafilaxia con estridor e hipotensión, el primer fármaco es:", o:["Dexclorfeniramina intravenosa","Adrenalina intramuscular","Hidrocortisona intravenosa","Salbutamol inhalado"], c:1, e:"La adrenalina revierte la vasodilatación, el edema y el broncoespasmo. Antihistamínico y corticoide son complementarios."},
+{q:"¿Qué antihistamínico evitarías en un anciano con hiperplasia de próstata y caídas?", o:["Bilastina","Loratadina","Difenhidramina","Desloratadina"], c:2, e:"Es de primera generación: sedante y anticolinérgico (confusión, retención urinaria, caídas)."}]};
+
+TEMAS[10] = {t:"Serotonina, antiserotoninérgicos y migraña",
+idea:"La serotonina regula el intestino, las plaquetas, los vasos y el cerebro. En la migraña, los triptanes estimulan receptores 5-HT1 para cerrar los vasos craneales y frenar la inflamación neurogénica.",
+claves:[
+"El **95 % de la serotonina** está en el intestino (células enterocromafines), no en el cerebro.",
+"Receptores clave: **5-HT1B/1D** (vasos craneales y terminales del trigémino), **5-HT3** (vómito) y **5-HT4** (motilidad intestinal).",
+"Los **triptanes** se toman **al inicio del dolor** de la crisis de migraña, no como prevención.",
+"El triptán cierra vasos craneales… y también coronarios: contraindicado en **cardiopatía isquémica** e hipertensión no controlada.",
+"Tomar analgésicos más de 10-15 días al mes produce **cefalea por abuso de medicación**: ahí está indicada la profilaxis."],
+grupos:[
+{n:"Triptanes (agonistas 5-HT1B/1D)", mec:"Vasoconstricción craneal e inhibición de la liberación de neuropéptidos inflamatorios (CGRP) en el trigémino.", ej:["Sumatriptán","Rizatriptán","Zolmitriptán","Almotriptán","Eletriptán"], clave:"Tratamiento de la crisis moderada-grave. Vía oral, nasal o subcutánea (sumatriptán).", alerta:"No en cardiopatía isquémica, ictus previo ni hipertensión no controlada. Opresión torácica transitoria tras la dosis: frecuente, pero hay que valorarla."},
+{n:"Analgésicos de la crisis", mec:"AINE o paracetamol, a menudo con un antiemético procinético.", ej:["Ibuprofeno","Naproxeno","Ácido acetilsalicílico","Paracetamol","Metoclopramida"], clave:"Primer escalón en la crisis leve-moderada. El antiemético mejora además la absorción."},
+{n:"Profilaxis de la migraña", mec:"Fármacos de distintos grupos que reducen la frecuencia de las crisis.", ej:["Propranolol","Topiramato","Amitriptilina","Flunarizina","Erenumab","Galcanezumab"], clave:"Indicada con crisis frecuentes o muy incapacitantes. Los anticuerpos anti-CGRP (erenumab, galcanezumab, fremanezumab) se reservan para casos refractarios."},
+{n:"Antagonistas 5-HT3", mec:"Bloquean la serotonina en la zona gatillo del vómito y en el intestino.", ej:["Ondansetrón","Granisetrón"], clave:"Vómitos por quimioterapia y postoperatorios. RAM: estreñimiento, cefalea, prolongación del QT."}],
+alertas:["Pregunta cuántos días al mes toma analgésicos un paciente con migraña: más de 10-15 sugiere cefalea por abuso de medicación.","Combinar triptanes con ISRS o IRSN tiene un riesgo teórico de síndrome serotoninérgico: vigila agitación, temblor y fiebre."],
+quiz:[
+{q:"¿Dónde se encuentra la mayor parte de la serotonina del organismo?", o:["En el cerebro","En las plaquetas","En el intestino","En los riñones"], c:2, e:"Alrededor del 95 % está en las células enterocromafines del tubo digestivo."},
+{q:"¿Cuándo debe tomarse un triptán?", o:["A diario como prevención","Al inicio del dolor de la crisis","Solo durante el aura, antes del dolor","Una vez pasada la crisis"], c:1, e:"Es un tratamiento sintomático de la crisis; funciona mejor cuanto antes se tome, una vez ha empezado el dolor."},
+{q:"¿En qué paciente está contraindicado el sumatriptán?", o:["Mujer joven con migraña con aura","Hombre con angina de pecho","Paciente con asma","Paciente con hipotiroidismo"], c:1, e:"La vasoconstricción por 5-HT1B también afecta a las coronarias: contraindicado en la cardiopatía isquémica."},
+{q:"Un paciente toma analgésicos 20 días al mes por migraña. ¿Qué problema sospechas?", o:["Alergia a los AINE","Cefalea por abuso de medicación","Migraña con aura","Síndrome serotoninérgico"], c:1, e:"El uso frecuente de analgésicos cronifica la cefalea; se trata retirándolos y con profilaxis."}]};
+
+TEMAS[11] = {t:"Anestésicos locales",
+idea:"Bloquean los canales de sodio del nervio y detienen la conducción del impulso. Primero se pierde el dolor y la temperatura; después, el tacto y la fuerza.",
+claves:[
+"Son **bases débiles**: la forma no ionizada atraviesa la membrana y la ionizada bloquea el canal de sodio desde dentro.",
+"En un **tejido inflamado o un absceso** (pH ácido) funcionan peor: se ionizan antes de entrar en el nervio.",
+"**Ésteres** (procaína, tetracaína, benzocaína): más alergias. **Amidas** (lidocaína, mepivacaína, bupivacaína, ropivacaína, articaína): metabolismo hepático, más usadas. Pista: las amidas llevan dos «i» en el nombre.",
+"Con **adrenalina**: dura más, sangra menos y se absorbe menos. Precaución en zonas acras (dedos, pene, nariz, orejas).",
+"Toxicidad sistémica: primero **SNC** (hormigueo peribucal, sabor metálico, acúfenos, convulsiones) y después corazón (arritmias). Tratamiento: **emulsión lipídica al 20 %**."],
+grupos:[
+{n:"Amidas", mec:"Bloqueo de canales de sodio; metabolismo hepático.", ej:["Lidocaína","Mepivacaína","Bupivacaína","Levobupivacaína","Ropivacaína","Articaína","Prilocaína"], clave:"Lidocaína: infiltración, tópica y antiarrítmico. Bupivacaína: larga duración, la más cardiotóxica. EMLA (lidocaína + prilocaína): crema antes de una venopunción en niños.", alerta:"La prilocaína y la benzocaína pueden producir metahemoglobinemia, sobre todo en lactantes."},
+{n:"Ésteres", mec:"Bloqueo de canales de sodio; los hidrolizan las colinesterasas plasmáticas.", ej:["Procaína","Tetracaína","Benzocaína","Cocaína"], clave:"Más reacciones alérgicas (metabolito PABA). Hoy se usan sobre todo por vía tópica (tetracaína en colirio, benzocaína en mucosas)."}],
+alertas:["Aspira antes de inyectar para no administrar el anestésico en un vaso.","Si el paciente refiere hormigueo alrededor de la boca, sabor metálico o zumbido de oídos tras una infiltración, detén la administración y avisa: son los primeros signos de toxicidad.","La crema EMLA necesita unos 60 minutos bajo oclusión para hacer efecto."],
+quiz:[
+{q:"¿Por qué un anestésico local funciona mal al drenar un absceso?", o:["Porque el pus lo inactiva químicamente","Porque el pH ácido lo ioniza y le impide atravesar la membrana del nervio","Porque el absceso tiene más nervios","Porque la inflamación acelera su metabolismo hepático"], c:1, e:"Es una base débil: en medio ácido predomina la forma ionizada, que no atraviesa la membrana."},
+{q:"¿Cuál es el primer signo de toxicidad sistémica por anestésicos locales?", o:["Bradicardia","Hormigueo peribucal y sabor metálico","Hipertermia","Exantema"], c:1, e:"La toxicidad empieza en el SNC (parestesias peribucales, acúfenos) antes que la cardiovascular."},
+{q:"¿Qué ventaja tiene añadir adrenalina al anestésico local?", o:["Acelera su eliminación","Prolonga el efecto y reduce el sangrado y la absorción","Evita las reacciones alérgicas","Permite usarlo por vía oral"], c:1, e:"La vasoconstricción mantiene el anestésico en la zona más tiempo y reduce la toxicidad sistémica."},
+{q:"¿Cuál de estos anestésicos es un éster?", o:["Lidocaína","Bupivacaína","Benzocaína","Mepivacaína"], c:2, e:"Benzocaína (un solo «i»): éster. Lidocaína, bupivacaína y mepivacaína son amidas."}]};
+
+TEMAS[12] = {t:"Relajantes musculares",
+idea:"Hay que distinguir tres situaciones: la espasticidad por lesión neurológica, la contractura muscular dolorosa y la parálisis buscada durante una anestesia. Cada una tiene sus fármacos.",
+claves:[
+"**Espasticidad ≠ contractura**: la espasticidad viene de una lesión de la neurona motora superior (ictus, lesión medular, esclerosis múltiple, parálisis cerebral); la contractura, de un músculo sobrecargado.",
+"**Espasmolíticos centrales**: baclofeno (GABA-B), tizanidina (α2) y benzodiacepinas. **Periféricos**: dantroleno y toxina botulínica.",
+"**Antiespasmódicos** (metocarbamol, ciclobenzaprina, tiocolchicósido): contracturas y lumbalgias, durante pocos días.",
+"Los **bloqueantes neuromusculares** paralizan, pero **no sedan ni alivian el dolor**: siempre con hipnótico, analgesia y ventilación.",
+"La **hipertermia maligna** (anestésicos inhalatorios y succinilcolina) se trata con **dantroleno**."],
+grupos:[
+{n:"Espasmolíticos de acción central", mec:"Reducen la excitabilidad de las neuronas motoras en la médula.", ej:["Baclofeno","Tizanidina","Diazepam"], clave:"Baclofeno: oral o intratecal en espasticidad grave. Somnolencia y debilidad.", alerta:"El baclofeno no se suspende de golpe (sobre todo la bomba intratecal): abstinencia grave con alucinaciones, convulsiones e hipertermia."},
+{n:"Espasmolíticos de acción periférica", mec:"Dantroleno: bloquea la salida de calcio del retículo sarcoplásmico. Toxina botulínica: impide la liberación de acetilcolina.", ej:["Dantroleno","Toxina botulínica"], clave:"Dantroleno: hipertermia maligna y espasticidad. Toxina botulínica: espasticidad focal, distonías, blefaroespasmo; efecto en días y dura meses."},
+{n:"Antiespasmódicos", mec:"Relajantes de acción central para el espasmo muscular agudo.", ej:["Metocarbamol","Ciclobenzaprina","Tiocolchicósido"], clave:"Contracturas y lumbalgia aguda, unos pocos días. Somnolencia.", alerta:"Tiocolchicósido: no en el embarazo ni en la lactancia, y tratamientos muy cortos por su riesgo genotóxico."},
+{n:"Bloqueantes neuromusculares", mec:"Antagonistas nicotínicos de la placa motora. **Despolarizantes** (succinilcolina) y **no despolarizantes** (rocuronio).", ej:["Succinilcolina","Rocuronio","Vecuronio","Cisatracurio"], clave:"Intubación y cirugía. La succinilcolina produce fasciculaciones e hiperpotasemia. Reversión: **neostigmina** (con atropina) o **sugammadex** (rocuronio, vecuronio).", alerta:"Un paciente paralizado puede estar consciente: nunca un bloqueante sin sedación y sin control de la vía aérea."}],
+alertas:["Somnolencia con casi todos los relajantes: advierte sobre conducir y sobre el alcohol.","Antecedente familiar de problemas con la anestesia: puede ser una susceptibilidad a la hipertermia maligna. Debe constar en la historia."],
+enlaces:"Tema 5 (neostigmina) y Tema 15 (benzodiacepinas).",
+quiz:[
+{q:"¿Qué fármaco se usa en la hipertermia maligna?", o:["Baclofeno","Dantroleno","Succinilcolina","Neostigmina"], c:1, e:"El dantroleno frena la salida masiva de calcio del retículo sarcoplásmico, causa de la crisis."},
+{q:"Un paciente con lesión medular tiene espasticidad grave en las piernas. ¿Qué grupo es el adecuado?", o:["Antiespasmódicos como el metocarbamol","Espasmolíticos como el baclofeno","Bloqueantes neuromusculares","Anestésicos locales"], c:1, e:"La espasticidad por lesión de neurona motora superior se trata con espasmolíticos (baclofeno, tizanidina, toxina botulínica)."},
+{q:"¿Qué afirmación sobre los bloqueantes neuromusculares es correcta?", o:["Producen sedación profunda","Alivian el dolor postoperatorio","Paralizan sin sedar: el paciente necesita hipnótico y ventilación","Se revierten con naloxona"], c:2, e:"Bloquean la placa motora, incluido el diafragma; no actúan sobre la conciencia ni el dolor."},
+{q:"¿Por qué no debe retirarse bruscamente el baclofeno?", o:["Por riesgo de hipoglucemia","Por un síndrome de abstinencia con convulsiones, alucinaciones e hipertermia","Porque produce hiperpotasemia","Porque causa hipotensión de primera dosis"], c:1, e:"La retirada brusca, sobre todo del baclofeno intratecal, puede ser grave e incluso mortal."}]};
+
+TEMAS[13] = {t:"Parkinson y fármacos antiparkinsonianos", fig:"balanza",
+idea:"En el Parkinson mueren las neuronas dopaminérgicas de la sustancia negra. El paciente no tiene un problema de fuerza: tiene el freno del movimiento pisado.",
+claves:[
+"**Balanza volcada**: falta dopamina en el estriado y, en relativo, sobra acetilcolina. Se trata subiendo la dopamina o bajando la acetilcolina.",
+"La **levodopa** es el fármaco más eficaz. Se combina con **carbidopa o benserazida** para que no se transforme en dopamina fuera del cerebro.",
+"La levodopa se da **a su hora y lejos de las proteínas**: compiten por la absorción. Un retraso es un «off», una caída o una broncoaspiración.",
+"Con los años aparecen **fluctuaciones** (fin de dosis, on-off) y **discinesias**.",
+"Los **agonistas dopaminérgicos** pueden producir **ludopatía y compras compulsivas** y somnolencia súbita: hay que preguntarlo.",
+"Ante un mayor que «se ha vuelto lento», revisa la medicación: antipsicóticos, metoclopramida y valproato producen parkinsonismo."],
+grupos:[
+{n:"Levodopa e inhibidores de su degradación", mec:"Precursor de la dopamina que atraviesa la barrera. Carbidopa y benserazida bloquean la dopa-descarboxilasa periférica; la entacapona bloquea la COMT.", ej:["Levodopa + carbidopa","Levodopa + benserazida","Entacapona","Opicapona"], clave:"Náuseas, hipotensión ortostática, discinesias, alucinaciones. La entacapona tiñe la orina de naranja.", alerta:"No retirarla bruscamente: puede producir un cuadro parecido al síndrome neuroléptico maligno."},
+{n:"Inhibidores de la MAO-B", mec:"Frenan la degradación de la dopamina en el cerebro.", ej:["Selegilina","Rasagilina","Safinamida"], clave:"Fases iniciales o como complemento de la levodopa. Precaución con ISRS, tramadol y simpaticomiméticos."},
+{n:"Agonistas dopaminérgicos", mec:"Estimulan directamente los receptores de dopamina.", ej:["Pramipexol","Ropinirol","Rotigotina","Apomorfina"], clave:"Rotigotina en parche. Apomorfina subcutánea como rescate de los bloqueos. Pramipexol y ropinirol también tratan el síndrome de piernas inquietas.", alerta:"Somnolencia súbita (precaución al conducir) y trastornos del control de impulsos: ludopatía, compras, hipersexualidad."},
+{n:"Amantadina", mec:"Antagonista NMDA que aumenta la liberación de dopamina.", ej:["Amantadina"], clave:"Útil para reducir las discinesias de la levodopa. Livedo reticularis, edemas, confusión."},
+{n:"Anticolinérgicos centrales", mec:"Bloquean el exceso relativo de acetilcolina en el estriado.", ej:["Trihexifenidilo","Biperideno"], clave:"Temblor en pacientes jóvenes; el biperideno es también el tratamiento de la distonía aguda por fármacos.", alerta:"Evitarlos en ancianos: confusión, retención urinaria, estreñimiento."}],
+alertas:["Respeta el horario exacto de la levodopa en el hospital; no la retrases por pruebas o ayunos sin consultarlo.","Para las náuseas de un paciente con Parkinson, domperidona; nunca metoclopramida ni haloperidol, que empeoran el cuadro."],
+enlaces:"Tema 17 (antipsicóticos): Parkinson y psicosis son los dos extremos del mismo eje dopaminérgico.",
+quiz:[
+{q:"¿Por qué se combina la levodopa con carbidopa?", o:["Para que atraviese mejor la barrera hematoencefálica","Para evitar que se transforme en dopamina fuera del cerebro","Para prolongar su efecto en el estriado","Para reducir las discinesias"], c:1, e:"La carbidopa inhibe la dopa-descarboxilasa periférica: llega más levodopa al cerebro y hay menos efectos periféricos."},
+{q:"¿Qué consejo sobre la levodopa es correcto?", o:["Tomarla con un batido de proteínas","Tomarla a su hora, separada de las comidas ricas en proteínas","Saltarse dosis si hay discinesias, sin consultar","Tomarla solo cuando haya temblor"], c:1, e:"Las proteínas compiten con la levodopa por la absorción; los horarios estables evitan los periodos off."},
+{q:"La familia de un paciente con pramipexol cuenta que juega a las apuestas cada noche. ¿Qué sospechas?", o:["Demencia por la enfermedad","Trastorno del control de impulsos por el agonista dopaminérgico","Efecto de la carbidopa","Una crisis on-off"], c:1, e:"Es una RAM conocida de los agonistas dopaminérgicos que el paciente rara vez relaciona con la pastilla."},
+{q:"¿Qué antiemético usarías en un paciente con Parkinson?", o:["Metoclopramida","Haloperidol","Domperidona","Clorpromazina"], c:2, e:"La domperidona apenas atraviesa la barrera hematoencefálica y no empeora el parkinsonismo."}]};
+
+TEMAS[14] = {t:"Depresión y fármacos antidepresivos",
+idea:"Los antidepresivos aumentan la serotonina o la noradrenalina en la sinapsis en horas, pero los síntomas mejoran en semanas. Esa latencia explica muchos abandonos.",
+claves:[
+"Hipótesis **monoaminérgica** (déficit de serotonina y noradrenalina) y **neurotrófica** (la mejoría tarda porque requiere cambios en la plasticidad neuronal).",
+"Los **ISRS** son la primera línea: eficaces, seguros en sobredosis y con pocos efectos anticolinérgicos.",
+"Efecto en **2-4 semanas**. Las primeras semanas son las de mayor riesgo de ideas suicidas en jóvenes: vigilancia estrecha.",
+"**No suspender de golpe**: síndrome de discontinuación (mareo, irritabilidad, sensaciones de «calambre»), sobre todo con paroxetina y venlafaxina.",
+"**Síndrome serotoninérgico** al combinar serotoninérgicos (ISRS, IMAO, tramadol, triptanes, linezolid): agitación, temblor, mioclonías, hipertermia."],
+grupos:[
+{n:"Inhibidores selectivos de la recaptación de serotonina (ISRS)", mec:"Bloquean el transportador de serotonina (SERT).", ej:["Sertralina","Fluoxetina","Citalopram","Escitalopram","Paroxetina","Fluvoxamina"], clave:"Depresión, ansiedad, TOC. RAM: náuseas, insomnio o somnolencia, disfunción sexual, hiponatremia en ancianos, **sangrado** (más con AINE o anticoagulantes). Citalopram y escitalopram prolongan el QT."},
+{n:"Inhibidores mixtos de la recaptación (IRSN)", mec:"Bloquean la recaptación de serotonina y noradrenalina sin afectar a otros receptores.", ej:["Venlafaxina","Duloxetina","Desvenlafaxina"], clave:"Depresión; la duloxetina también en el dolor neuropático. Pueden subir la tensión arterial."},
+{n:"Antidepresivos tricíclicos", mec:"Inhiben la recaptación de serotonina y noradrenalina y bloquean receptores muscarínicos, H1 y α1.", ej:["Amitriptilina","Imipramina","Clomipramina","Nortriptilina"], clave:"Hoy más usados en dolor neuropático y profilaxis de migraña. RAM anticolinérgicas, sedación, hipotensión ortostática, aumento de peso.", alerta:"Muy tóxicos en sobredosis (arritmias por bloqueo de canales de sodio): cuidado en pacientes con riesgo suicida."},
+{n:"Inhibidores de la recaptación de noradrenalina (y dopamina)", mec:"Bloquean la recaptación de noradrenalina (y de dopamina, el bupropión).", ej:["Reboxetina","Bupropión","Atomoxetina"], clave:"Bupropión: depresión y deshabituación tabáquica; baja el umbral convulsivo. Atomoxetina: TDAH."},
+{n:"Inhibidores de la MAO (IMAO)", mec:"Inhiben la enzima que degrada las monoaminas.", ej:["Moclobemida","Tranilcipromina"], clave:"Reservados para depresiones resistentes. La moclobemida es reversible y selectiva de la MAO-A; la tranilcipromina, irreversible y no selectiva.", alerta:"Crisis hipertensiva con alimentos ricos en tiramina (quesos curados) o simpaticomiméticos; síndrome serotoninérgico con ISRS o tramadol."},
+{n:"Antagonistas de receptores", mec:"Bloquean receptores presinápticos α2 y 5-HT2, lo que aumenta la liberación de monoaminas.", ej:["Mirtazapina","Trazodona","Mianserina"], clave:"Sedantes: útiles con insomnio. La mirtazapina aumenta el apetito y el peso."}],
+alertas:["Explica al paciente que el antidepresivo tarda semanas en hacer efecto y que los efectos adversos aparecen antes: así se evita el abandono precoz.","Vigila especialmente las primeras semanas y los cambios de dosis en adolescentes y adultos jóvenes.","Un paciente con ISRS y un AINE pautado tiene más riesgo de hemorragia digestiva."],
+quiz:[
+{q:"¿Cuánto tarda en aparecer el efecto antidepresivo?", o:["Unas horas","1-2 días","2-4 semanas","3-6 meses"], c:2, e:"La química sináptica cambia en horas, pero la mejoría clínica requiere semanas de adaptación neuronal."},
+{q:"¿Qué grupo de antidepresivos es especialmente peligroso en sobredosis por su cardiotoxicidad?", o:["ISRS","Tricíclicos","Mirtazapina","Bupropión a dosis bajas"], c:1, e:"Los tricíclicos bloquean canales de sodio cardiacos: arritmias graves en sobredosis."},
+{q:"¿Cuál es el riesgo de combinar un IMAO con tramadol?", o:["Hipoglucemia","Síndrome serotoninérgico","Bradicardia","Hiperpotasemia"], c:1, e:"Ambos aumentan la serotonina: agitación, temblor, mioclonías e hipertermia."},
+{q:"Un paciente con paroxetina deja de tomarla de golpe y nota mareo, irritabilidad y sensación de calambres. Se trata de:", o:["Una recaída de la depresión","Un síndrome de discontinuación","Una reacción alérgica","Un síndrome neuroléptico maligno"], c:1, e:"Por eso los antidepresivos se retiran de forma gradual, sobre todo los de semivida corta."}]};
+
+TEMAS[15] = {t:"Fármacos ansiolíticos e hipnóticos",
+idea:"Las benzodiacepinas potencian al GABA, el gran freno del cerebro. No abren el canal por sí solas: solo amplifican el efecto del GABA. De ahí su techo y su relativa seguridad.",
+claves:[
+"Las **benzodiacepinas** son **moduladores alostéricos positivos** del receptor GABA-A: aumentan el efecto del GABA endógeno.",
+"Los **barbitúricos** pueden abrir el canal con más intensidad y duración, sin techo: mucho más peligrosos.",
+"Efectos: ansiolítico, hipnótico, anticonvulsivante, relajante muscular y amnésico.",
+"Con **alcohol u opioides** se pierde el techo: depresión respiratoria. Antídoto: **flumazenilo**, de acción más corta que muchas benzodiacepinas.",
+"En el anciano, benzodiacepinas de **fase II** (lorazepam, oxazepam, lormetazepam), dosis bajas y siempre con un plan de retirada.",
+"Tolerancia y dependencia: tratamientos cortos (insomnio, 2-4 semanas) y **retirada gradual**."],
+grupos:[
+{n:"Benzodiacepinas de acción corta y ultracorta", mec:"Moduladores positivos del GABA-A con semivida corta.", ej:["Midazolam","Triazolam","Lormetazepam"], clave:"Sedación para procedimientos (midazolam) e insomnio de conciliación, con menos resaca."},
+{n:"Benzodiacepinas de acción intermedia", mec:"Moduladores positivos del GABA-A.", ej:["Lorazepam","Alprazolam","Oxazepam","Bromazepam"], clave:"Ansiedad. Lorazepam y oxazepam se metabolizan solo por glucuronidación (fase II): preferibles en ancianos y hepatópatas."},
+{n:"Benzodiacepinas de acción larga", mec:"Moduladores positivos del GABA-A con metabolitos activos.", ej:["Diazepam","Clorazepato","Clonazepam"], clave:"Ansiedad, abstinencia alcohólica, crisis epilépticas (diazepam rectal, clonazepam). Se acumulan en ancianos.", alerta:"Somnolencia diurna, caídas y fracturas en personas mayores."},
+{n:"Hipnóticos Z", mec:"Actúan sobre el receptor GABA-A (subunidad α1).", ej:["Zolpidem","Zopiclona"], clave:"Insomnio de conciliación, tratamientos cortos. Pueden producir conductas complejas durante el sueño."},
+{n:"Barbitúricos", mec:"Aumentan la apertura del canal de cloruro; a dosis altas lo abren directamente.", ej:["Fenobarbital","Tiopental"], clave:"Hoy solo como antiepiléptico (fenobarbital) e inductor anestésico (tiopental). Margen estrecho e inductores enzimáticos."},
+{n:"Otros ansiolíticos e hipnóticos", mec:"Mecanismos distintos del GABA-A.", ej:["Buspirona","Hidroxizina","Melatonina"], clave:"Buspirona: no seda ni crea dependencia, pero tarda semanas. Melatonina: alteraciones del ritmo del sueño y jet lag."}],
+alertas:["Antes de una benzodiacepina, valora la higiene del sueño y la causa de la ansiedad o el insomnio.","No combines benzodiacepinas con alcohol u opioides sin vigilancia: riesgo de depresión respiratoria.","Si se usa flumazenilo, vigila la resedación (dura menos) y el riesgo de convulsiones en pacientes dependientes."],
+quiz:[
+{q:"¿Qué diferencia el mecanismo de las benzodiacepinas del de los barbitúricos?", o:["Las benzodiacepinas abren el canal de cloruro por sí solas","Las benzodiacepinas solo potencian al GABA y tienen techo; los barbitúricos pueden abrir el canal con más intensidad","Las benzodiacepinas actúan sobre el receptor GABA-B","Los barbitúricos bloquean los receptores NMDA"], c:1, e:"La benzodiacepina modula; el barbitúrico puede actuar sin GABA y no tiene techo: por eso es más peligroso."},
+{q:"¿Qué benzodiacepina es preferible en un anciano?", o:["Diazepam","Clorazepato","Lorazepam","Flurazepam"], c:2, e:"El lorazepam se elimina por glucuronidación (fase II), sin metabolitos activos, y no se acumula tanto."},
+{q:"¿Cuál es el antídoto de una intoxicación por benzodiacepinas?", o:["Naloxona","Flumazenilo","N-acetilcisteína","Atropina"], c:1, e:"El flumazenilo es un antagonista competitivo del sitio benzodiacepínico; su efecto dura poco."},
+{q:"¿Qué combinación aumenta más el riesgo de depresión respiratoria?", o:["Lorazepam y paracetamol","Diazepam y alcohol","Melatonina e ibuprofeno","Buspirona y omeprazol"], c:1, e:"El alcohol y los opioides suman su efecto depresor y eliminan el techo de seguridad de las benzodiacepinas."}]};
+
+TEMAS[16] = {t:"Fármacos antiepilépticos",
+idea:"La epilepsia es una balanza volcada hacia la excitación. Los antiepilépticos ponen freno (GABA) o quitan acelerador (sodio, calcio, glutamato).",
+claves:[
+"Crisis **focales** (por una lesión localizada) y **generalizadas** (tónico-clónicas, ausencias).",
+"Los bloqueantes del canal de sodio son **«badenes inteligentes»**: actúan sobre todo en las neuronas que disparan demasiado (bloqueo dependiente del uso).",
+"Ante una crisis: **mirar el reloj**, proteger la cabeza, nada en la boca y posición lateral al terminar. **Más de 5 minutos es un estado epiléptico**: benzodiacepina.",
+"El **valproato** es uno de los teratógenos más potentes: no en mujeres en edad fértil salvo programa de prevención del embarazo.",
+"Muchos antiepilépticos son **inductores enzimáticos** (carbamazepina, fenitoína, fenobarbital): fallo de los anticonceptivos y de otros fármacos.",
+"Nunca se suspenden de golpe: riesgo de crisis y de estado epiléptico."],
+grupos:[
+{n:"Bloqueantes de los canales de sodio", mec:"Estabilizan el canal de sodio inactivado y frenan las descargas repetidas.", ej:["Carbamazepina","Oxcarbazepina","Fenitoína","Lamotrigina","Lacosamida"], clave:"Base de las crisis focales. RAM: mareo, diplopía, ataxia. Carbamazepina: inductora, hiponatremia, exantemas graves. Fenitoína: hiperplasia gingival y margen estrecho. Lamotrigina: exantema, subir la dosis despacio.", alerta:"Carbamazepina y fenitoína reducen la eficacia de los anticonceptivos hormonales."},
+{n:"Potenciadores del GABA", mec:"Aumentan la inhibición GABAérgica: sobre el receptor GABA-A (benzodiacepinas, barbitúricos) o aumentando el GABA disponible (vigabatrina, tiagabina).", ej:["Clonazepam","Diazepam","Midazolam","Lorazepam","Fenobarbital","Vigabatrina"], clave:"Benzodiacepinas: tratamiento de la crisis prolongada (midazolam bucal o intranasal, diazepam rectal, lorazepam IV). Su uso crónico se limita por sedación y tolerancia."},
+{n:"Bloqueantes de los canales de calcio", mec:"Reducen la entrada de calcio en la terminal presináptica o en el tálamo.", ej:["Etosuximida","Gabapentina","Pregabalina"], clave:"Etosuximida: ausencias. Gabapentina y pregabalina: crisis focales y, sobre todo, **dolor neuropático**. La pregabalina tiene potencial de abuso."},
+{n:"Otros mecanismos y amplio espectro", mec:"Reducen la liberación de glutamato o actúan por varios mecanismos.", ej:["Levetiracetam","Valproato","Topiramato","Perampanel"], clave:"Levetiracetam: muy usado, pocas interacciones, irritabilidad. Valproato: amplio espectro, hepatotoxicidad, pancreatitis, aumento de peso. Topiramato: pérdida de peso, cálculos renales.", alerta:"Valproato: malformaciones (espina bífida) y alteraciones del neurodesarrollo. Prohibido en el embarazo salvo excepciones."}],
+alertas:["Ante una crisis, cronometra: si dura más de 5 minutos, administra la benzodiacepina pautada y avisa.","Revisa siempre las interacciones de un antiepiléptico nuevo, especialmente con anticonceptivos y anticoagulantes."],
+quiz:[
+{q:"¿A partir de cuánto tiempo una crisis convulsiva se considera estado epiléptico y requiere tratamiento?", o:["30 segundos","5 minutos","30 minutos","1 hora"], c:1, e:"Más de 5 minutos de crisis (o crisis repetidas sin recuperar) es un estado epiléptico: benzodiacepina."},
+{q:"¿Qué antiepiléptico está contraindicado en mujeres en edad fértil salvo programa de prevención del embarazo?", o:["Levetiracetam","Lamotrigina","Valproato","Gabapentina"], c:2, e:"El valproato produce malformaciones y alteraciones del neurodesarrollo."},
+{q:"Una paciente con carbamazepina y anticonceptivos orales queda embarazada. ¿Qué mecanismo lo explica?", o:["La carbamazepina inhibe el CYP3A4","La carbamazepina induce el metabolismo del anticonceptivo","La carbamazepina desplaza al anticonceptivo de la albúmina","Es una RAM de tipo B"], c:1, e:"Es un inductor enzimático: acelera el metabolismo de las hormonas y reduce su eficacia (RAM tipo F)."},
+{q:"¿Qué antiepilépticos se usan también en el dolor neuropático?", o:["Etosuximida y fenobarbital","Gabapentina y pregabalina","Fenitoína y valproato","Vigabatrina y tiagabina"], c:1, e:"Reducen la liberación de neurotransmisores excitadores en las vías del dolor."}]};
+
+TEMAS[17] = {t:"Fármacos antipsicóticos",
+idea:"La eficacia de un antipsicótico es el bloqueo de los receptores D2. Bloquear la dopamina en las vías equivocadas produce sus efectos adversos.",
+claves:[
+"**Hipótesis dopaminérgica**: exceso de dopamina en la vía mesolímbica (síntomas positivos: delirios, alucinaciones).",
+"**Típicos** (haloperidol, clorpromazina): más efectos **extrapiramidales**. **Atípicos** (risperidona, olanzapina, quetiapina, aripiprazol, clozapina): menos, pero **síndrome metabólico**.",
+"La **acatisia** se confunde con agitación: si se sube la dosis, empeora.",
+"**Síndrome neuroléptico maligno**: fiebre, rigidez, alteración de la conciencia, inestabilidad autonómica y CPK alta. Es una urgencia.",
+"**Fiebre o dolor de garganta con clozapina = hemograma urgente** (agranulocitosis).",
+"En ancianos con demencia aumentan la mortalidad y el riesgo de ictus."],
+grupos:[
+{n:"Antipsicóticos típicos", mec:"Antagonistas potentes de los receptores D2.", ej:["Haloperidol","Clorpromazina","Levomepromazina","Zuclopentixol"], clave:"Haloperidol: agitación y delirio. Mucho efecto extrapiramidal y aumento de prolactina.", alerta:"Distonía aguda (tortícolis, crisis oculógiras) en jóvenes: se trata con biperideno."},
+{n:"Antipsicóticos atípicos", mec:"Bloquean D2 y receptores de serotonina 5-HT2A; el aripiprazol es agonista parcial D2.", ej:["Risperidona","Paliperidona","Olanzapina","Quetiapina","Aripiprazol","Ziprasidona"], clave:"Primera línea en la esquizofrenia. Olanzapina: mucho aumento de peso. Risperidona: prolactina. Quetiapina: sedación e hipotensión. Existen formas depot inyectables para mejorar la adherencia.", alerta:"Controla peso, glucemia, lípidos y tensión arterial: síndrome metabólico."},
+{n:"Clozapina", mec:"Antipsicótico atípico con poco bloqueo D2 y muchas otras dianas.", ej:["Clozapina"], clave:"Esquizofrenia resistente. Casi sin efectos extrapiramidales, pero agranulocitosis, convulsiones, sialorrea y estreñimiento grave.", alerta:"Hemogramas periódicos obligatorios. Fiebre o dolor de garganta: avisar de inmediato."}],
+alertas:["Inquietud, imposibilidad de estar quieto y ansiedad tras iniciar un antipsicótico: piensa en acatisia antes que en agitación.","Fiebre alta con rigidez y confusión en un paciente con antipsicóticos: síndrome neuroléptico maligno. Suspender el fármaco, enfriar y avisar.","Algunos antipsicóticos prolongan el QT: precaución con otros fármacos que lo alarguen."],
+enlaces:"Tema 13 (Parkinson): el mismo eje dopaminérgico; un antipsicótico empuja hacia el parkinsonismo.",
+quiz:[
+{q:"¿Qué mecanismo es responsable de la eficacia antipsicótica?", o:["Agonismo GABA-A","Bloqueo de receptores D2","Inhibición de la recaptación de serotonina","Bloqueo de canales de sodio"], c:1, e:"La potencia antipsicótica se correlaciona con el bloqueo D2 en la vía mesolímbica."},
+{q:"Un paciente con clozapina presenta fiebre y dolor de garganta. ¿Qué hay que hacer?", o:["Pautar paracetamol y esperar","Hemograma urgente por posible agranulocitosis","Aumentar la dosis de clozapina","Añadir biperideno"], c:1, e:"La agranulocitosis es la RAM más grave de la clozapina: la fiebre es una señal de alarma."},
+{q:"¿Qué RAM se asocia especialmente a la olanzapina?", o:["Hipoglucemia","Aumento de peso y síndrome metabólico","Agranulocitosis","Hiperplasia gingival"], c:1, e:"Los atípicos, sobre todo olanzapina y clozapina, producen aumento de peso, diabetes y dislipemia."},
+{q:"Fiebre de 40 °C, rigidez intensa, confusión y CPK elevada en un paciente con haloperidol sugieren:", o:["Distonía aguda","Acatisia","Síndrome neuroléptico maligno","Discinesia tardía"], c:2, e:"Es una urgencia: suspender el antipsicótico, medidas de soporte y enfriamiento."}]};
+
+TEMAS[18] = {t:"Anestésicos generales",
+idea:"La anestesia general es una depresión reversible del sistema nervioso central. La anestesia moderna es balanceada: combina fármacos con funciones distintas.",
+claves:[
+"Componentes: **hipnosis** (inconsciencia), **analgesia**, **relajación muscular** y control de los reflejos autónomos. Ningún fármaco hace todo.",
+"**Anestesia balanceada**: hipnótico + opioide + bloqueante neuromuscular, que no son intercambiables.",
+"Inhalatorios: el coeficiente **sangre/gas** indica la rapidez (cuanto menor, más rápido) y el **aceite/gas**, la potencia. La **CAM** es la DE₅₀ de los inhalatorios.",
+"El **propofol** es el inductor intravenoso más usado: rápido, con hipotensión y dolor al inyectar.",
+"La **ketamina** mantiene la tensión y la respiración y es analgésica, pero produce alucinaciones al despertar."],
+grupos:[
+{n:"Anestésicos inhalatorios", mec:"Gases o vapores que deprimen el SNC; su efecto depende de la concentración alveolar.", ej:["Sevoflurano","Desflurano","Isoflurano","Óxido nitroso"], clave:"Sevoflurano: inducción inhalatoria en niños. Desflurano: despertar muy rápido. Óxido nitroso: analgésico, poco potente.", alerta:"Los halogenados (y la succinilcolina) pueden desencadenar una **hipertermia maligna**: dantroleno."},
+{n:"Anestésicos intravenosos", mec:"Potencian el GABA-A (propofol, tiopental, etomidato, midazolam) o bloquean el NMDA (ketamina).", ej:["Propofol","Ketamina","Etomidato","Tiopental","Midazolam"], clave:"Propofol: inducción y sedación, hipotensión. Ketamina: analgesia y broncodilatación, alucinaciones. Etomidato: estabilidad cardiovascular, frena la suprarrenal. Tiopental: barbitúrico, hoy poco usado."},
+{n:"Coadyuvantes de la anestesia", mec:"Completan la anestesia balanceada.", ej:["Fentanilo","Remifentanilo","Rocuronio","Sugammadex","Ondansetrón","Dexametasona"], clave:"Opioides para la analgesia, bloqueantes neuromusculares para la relajación y antieméticos para las náuseas y vómitos postoperatorios."}],
+alertas:["En el despertar, vigila la vía aérea, la saturación, el nivel de conciencia, el dolor y las náuseas.","Tras una sedación o anestesia general, el paciente no debe conducir ni tomar decisiones importantes durante 24 horas."],
+quiz:[
+{q:"¿Qué indica el coeficiente de partición sangre/gas de un anestésico inhalatorio?", o:["Su potencia","Su rapidez de inducción y recuperación","Su toxicidad hepática","Su capacidad analgésica"], c:1, e:"Cuanto menos soluble en sangre, antes se equilibra y más rápida es la inducción y la recuperación. La potencia la indica el aceite/gas."},
+{q:"¿Qué es la CAM?", o:["La concentración tóxica de un anestésico local","La concentración alveolar que impide el movimiento ante el estímulo quirúrgico en el 50 % de los pacientes","La dosis máxima de propofol","Un tipo de anestesia regional"], c:1, e:"Es la medida de potencia de los inhalatorios: equivale a su DE₅₀."},
+{q:"¿Qué anestésico intravenoso mantiene la tensión arterial y produce alucinaciones al despertar?", o:["Propofol","Ketamina","Midazolam","Tiopental"], c:1, e:"La ketamina es un antagonista NMDA con efecto simpaticomimético, analgesia y reacciones disociativas."},
+{q:"¿Qué fármaco se usa en una hipertermia maligna?", o:["Dantroleno","Neostigmina","Naloxona","Flumazenilo"], c:0, e:"El dantroleno frena la salida de calcio del retículo sarcoplásmico del músculo."}]};
+
+TEMAS[19] = {t:"Antiinflamatorios no esteroideos (AINE)", fig:"cox",
+idea:"Los AINE bloquean la ciclooxigenasa. La COX-1 es el equipo de mantenimiento y la COX-2, el de bomberos: el efecto viene de bloquear la COX-2 y las RAM, de bloquear la COX-1.",
+claves:[
+"Cuatro efectos: **analgésico**, **antipirético**, **antiinflamatorio** y, la aspirina, **antiagregante**.",
+"La **aspirina** inhibe la COX de forma irreversible: su efecto antiagregante dura lo que vive la plaqueta, **7-10 días**.",
+"El **paracetamol** es analgésico y antipirético, pero no antiinflamatorio. Máximo **4 g/día** (3 g en pacientes de riesgo) y cuidado con el paracetamol escondido en combinaciones. Antídoto: **N-acetilcisteína**.",
+"**Coxibs**: menos daño gástrico pero más riesgo cardiovascular, porque desequilibran la balanza tromboxano-prostaciclina.",
+"**AINE + IECA o ARA II + diurético = «triple whammy»**: fracaso renal agudo.",
+"**Metamizol + fiebre o dolor de garganta = hemograma**: agranulocitosis."],
+grupos:[
+{n:"Salicilatos", mec:"Inhibición irreversible de la COX (acetilación).", ej:["Ácido acetilsalicílico"], clave:"A dosis bajas, antiagregante en la prevención cardiovascular. Se suspende unos 7 días antes de una cirugía si el riesgo de sangrado lo exige.", alerta:"No en niños y adolescentes con infecciones víricas: **síndrome de Reye**."},
+{n:"Paraaminofenoles", mec:"Inhibición de la COX sobre todo central; escaso efecto periférico.", ej:["Paracetamol"], clave:"Primera elección en dolor leve y fiebre, también en embarazo. No daña el estómago ni el riñón.", alerta:"Hepatotoxicidad en sobredosis o con alcohol: el metabolito tóxico agota el glutatión. Antídoto: N-acetilcisteína."},
+{n:"Pirazolonas", mec:"Analgésico y antipirético potente, con efecto espasmolítico.", ej:["Metamizol"], clave:"Dolor agudo intenso y cólicos. Hipotensión si se inyecta rápido.", alerta:"Agranulocitosis: ante fiebre, dolor de garganta o llagas en la boca, suspender y hacer un hemograma."},
+{n:"Derivados propiónicos", mec:"Inhibición reversible y no selectiva de la COX.", ej:["Ibuprofeno","Naproxeno","Dexketoprofeno"], clave:"Los más usados: dolor, fiebre e inflamación. El ibuprofeno a dosis bajas es de los AINE con menos riesgo gástrico."},
+{n:"Derivados acéticos y oxicams", mec:"Inhibición no selectiva de la COX, con más potencia antiinflamatoria.", ej:["Diclofenaco","Indometacina","Ketorolaco","Meloxicam","Piroxicam"], clave:"Dolor musculoesquelético y postoperatorio. El ketorolaco es muy potente, pero solo para tratamientos muy cortos. Más riesgo digestivo."},
+{n:"Coxibs", mec:"Inhibición selectiva de la COX-2.", ej:["Celecoxib","Etoricoxib"], clave:"Menos úlceras, pero más infartos e ictus. No en pacientes con enfermedad cardiovascular."}],
+alertas:["Gastroprotección con IBP cuando hay riesgo: mayores de 65 años, úlcera previa, o si se toman anticoagulantes, corticoides o ISRS.","Revisa la función renal y la tensión en pacientes con AINE crónicos, sobre todo si toman IECA, ARA II o diuréticos.","Algunos asmáticos sufren broncoespasmo con los AINE."],
+quiz:[
+{q:"¿Por qué el efecto antiagregante de la aspirina dura 7-10 días?", o:["Porque tiene una semivida muy larga","Porque inhibe la COX de forma irreversible y la plaqueta no puede fabricar enzima nueva","Porque se acumula en el hígado","Porque bloquea la COX-2"], c:1, e:"La plaqueta no tiene núcleo: el efecto dura hasta que se renuevan las plaquetas."},
+{q:"¿Qué afirmación sobre el paracetamol es correcta?", o:["Es un potente antiinflamatorio","Su toxicidad principal es hepática y su antídoto es la N-acetilcisteína","Es antiagregante","Está contraindicado en el embarazo"], c:1, e:"No es antiinflamatorio; en sobredosis agota el glutatión hepático."},
+{q:"¿Qué combinación expone a una insuficiencia renal aguda?", o:["Paracetamol + omeprazol","Ibuprofeno + enalapril + hidroclorotiazida","Metamizol + paracetamol","Celecoxib + omeprazol"], c:1, e:"Es el «triple whammy»: AINE, IECA y diurético comprometen a la vez la perfusión y la filtración renal."},
+{q:"¿Por qué los coxibs aumentan el riesgo cardiovascular?", o:["Porque elevan el colesterol","Porque inhiben la prostaciclina vascular sin inhibir el tromboxano plaquetario","Porque producen taquicardia","Porque son nefrotóxicos"], c:1, e:"Al bloquear solo la COX-2 se reduce la prostaciclina (antiagregante, vasodilatadora) y predomina el tromboxano."},
+{q:"Un paciente con metamizol presenta fiebre alta y dolor de garganta. ¿Qué sospechas?", o:["Síndrome de Reye","Agranulocitosis","Hepatotoxicidad","Úlcera gástrica"], c:1, e:"Es la RAM grave característica del metamizol: suspender y hacer un hemograma urgente."}]};
+
+TEMAS[20] = {t:"Glucocorticoides",
+idea:"Los corticoides son los antiinflamatorios e inmunosupresores más potentes. Sus RAM son el cortisol haciendo su trabajo demasiado tiempo.",
+claves:[
+"Actúan sobre un **receptor nuclear**: cambian la expresión de genes, por eso tardan horas.",
+"Inducen la **lipocortina**, que inhibe la **fosfolipasa A₂**: bloquean a la vez prostaglandinas y leucotrienos. Por eso son más potentes que los AINE.",
+"Duración: corta (**hidrocortisona**), intermedia (**prednisona, metilprednisolona**) y larga (**dexametasona, betametasona**).",
+"Dosis **por la mañana**, como el ritmo natural del cortisol; vigilar la **glucemia por la tarde**.",
+"Tras más de 2-3 semanas de tratamiento, **retirada gradual**: la suprarrenal está atrofiada y una retirada brusca puede producir una insuficiencia suprarrenal.",
+"Inhalados: enjuagarse la boca tras cada uso para evitar la **candidiasis**."],
+grupos:[
+{n:"Corticoides sistémicos", mec:"Agonistas del receptor de glucocorticoides; potencia antiinflamatoria creciente de la hidrocortisona a la dexametasona.", ej:["Hidrocortisona","Prednisona","Prednisolona","Metilprednisolona","Dexametasona","Betametasona"], clave:"Asma y EPOC agudizados, enfermedades autoinmunes, alergia grave, edema cerebral (dexametasona), insuficiencia suprarrenal (hidrocortisona).", alerta:"RAM con uso prolongado: hiperglucemia, hipertensión, osteoporosis, miopatía, infecciones, úlcera (más con AINE), cataratas, insomnio y alteraciones del ánimo, retraso del crecimiento."},
+{n:"Corticoides inhalados", mec:"Acción antiinflamatoria local en el bronquio con poca absorción sistémica.", ej:["Budesonida","Fluticasona","Beclometasona","Ciclesonida"], clave:"Tratamiento de fondo del asma. No sirven para una crisis aguda porque tardan días en hacer efecto.", alerta:"Candidiasis oral y disfonía: enjuagarse la boca y escupir tras cada inhalación."},
+{n:"Corticoides tópicos e intraarticulares", mec:"Acción antiinflamatoria local.", ej:["Hidrocortisona tópica","Betametasona tópica","Triamcinolona intraarticular","Mometasona"], clave:"Dermatitis, artritis, tendinopatías. Los tópicos potentes en la cara o durante mucho tiempo atrofian la piel."}],
+alertas:["Un paciente con corticoides crónicos que deja de tomarlos, vomita o sufre una cirugía o infección grave puede necesitar dosis de estrés.","Vigila glucemia, tensión, peso, signos de infección y estado de ánimo; valora la protección ósea en tratamientos prolongados."],
+quiz:[
+{q:"¿Por qué los glucocorticoides son más potentes que los AINE como antiinflamatorios?", o:["Porque inhiben solo la COX-2","Porque actúan antes en la cascada, sobre la fosfolipasa A₂, y bloquean prostaglandinas y leucotrienos","Porque tienen una semivida más corta","Porque bloquean receptores H1"], c:1, e:"Al frenar la fosfolipasa A₂ (vía lipocortina) cortan la producción de todos los eicosanoides."},
+{q:"¿Por qué no debe suspenderse bruscamente un corticoide tras varias semanas de tratamiento?", o:["Por riesgo de hiperglucemia","Por insuficiencia suprarrenal, al estar atrofiada la glándula","Por riesgo de úlcera","Porque produce hipertensión de rebote"], c:1, e:"El tratamiento frena el eje hipotálamo-hipófisis-suprarrenal; la glándula necesita tiempo para recuperarse."},
+{q:"¿En qué momento del día se recomienda tomar una dosis única de corticoide oral?", o:["Por la noche, al acostarse","Por la mañana","A mediodía, con la comida","Es indiferente"], c:1, e:"Imita el pico fisiológico de cortisol, reduce la supresión del eje y el insomnio."},
+{q:"¿Qué consejo se da tras usar un corticoide inhalado?", o:["Tumbarse 30 minutos","Enjuagarse la boca y escupir","Tomar un vaso de leche","Usar después el salbutamol"], c:1, e:"Así se reduce el depósito en la orofaringe y el riesgo de candidiasis y disfonía."}]};
+
+TEMAS[21] = {t:"Analgésicos opioides", fig:"escalera",
+idea:"Los opioides actúan sobre los receptores del propio sistema de control del dolor. Lo bueno y lo malo vienen del mismo receptor μ: analgesia, pero también sedación, estreñimiento y depresión respiratoria.",
+claves:[
+"El dolor puede ser **nociceptivo** (tejido dañado) o **neuropático** (nervio dañado). Los opioides funcionan bien en el primero y peor en el segundo.",
+"Receptores **μ, δ y κ**; los ligandos endógenos son endorfinas, encefalinas y dinorfinas. Casi todos los efectos clínicos se deben al μ.",
+"El **estreñimiento no desarrolla tolerancia**: todo paciente con opioides debe tener un **laxante pautado**.",
+"Vigila la **sedación antes que la saturación**: la somnolencia precede a la depresión respiratoria.",
+"Intoxicación: **coma, miosis puntiforme y depresión respiratoria**. Antídoto: **naloxona**, que dura menos que el opioide: el paciente revertido se queda en observación.",
+"**Escalera analgésica**: se sube según la intensidad del dolor y los coadyuvantes caben en todos los escalones."],
+grupos:[
+{n:"Agonistas puros mayores", mec:"Agonistas completos del receptor μ.", ej:["Morfina","Fentanilo","Oxicodona","Hidromorfona","Metadona","Petidina"], clave:"Dolor intenso agudo y oncológico. Fentanilo en parche cada 72 horas (el calor aumenta su absorción). La metadona tiene una semivida larga y variable.", alerta:"Depresión respiratoria, sobre todo al inicio, con dosis altas o combinados con benzodiacepinas o alcohol."},
+{n:"Agonistas puros menores", mec:"Agonistas μ de menor potencia.", ej:["Codeína","Tramadol","Dihidrocodeína"], clave:"Segundo escalón. La codeína es un profármaco que el CYP2D6 transforma en morfina; el tramadol tiene además efecto serotoninérgico y noradrenérgico.", alerta:"Codeína: no en menores de 12 años ni en la lactancia. Tramadol: convulsiones y síndrome serotoninérgico con ISRS."},
+{n:"Agonistas parciales", mec:"Agonista parcial μ con techo de efecto.", ej:["Buprenorfina"], clave:"Dolor crónico (parches) y tratamiento de la dependencia de opioides. Puede desencadenar abstinencia si se da a un paciente que toma otro opioide."},
+{n:"Antagonistas", mec:"Bloquean competitivamente los receptores opioides.", ej:["Naloxona","Naltrexona","Metilnaltrexona"], clave:"Naloxona: intoxicación aguda (IV, IM o intranasal). Naltrexona: deshabituación. Metilnaltrexona: estreñimiento por opioides sin quitar la analgesia.", alerta:"La naloxona dura menos que muchos opioides: puede reaparecer la depresión respiratoria."}],
+alertas:["Antes de cada dosis valora la escala de dolor, el nivel de sedación y la frecuencia respiratoria.","Laxante pautado desde el primer día de tratamiento con opioides.","Parche de fentanilo: retirar el anterior, rotar la zona y evitar el calor (mantas eléctricas, fiebre alta)."],
+quiz:[
+{q:"¿Qué RAM de los opioides no desarrolla tolerancia?", o:["Náuseas","Sedación","Estreñimiento","Depresión respiratoria"], c:2, e:"Por eso el laxante debe pautarse desde el inicio y mantenerse."},
+{q:"¿Cuál es la tríada de la intoxicación por opioides?", o:["Agitación, midriasis y taquicardia","Coma, miosis puntiforme y depresión respiratoria","Fiebre, rigidez y CPK alta","Hipoglucemia, sudoración y temblor"], c:1, e:"La miosis puntiforme orienta mucho al diagnóstico; la naloxona lo confirma y lo trata."},
+{q:"Tras revertir con naloxona una intoxicación por morfina, ¿por qué el paciente debe quedar en observación?", o:["Porque la naloxona produce hipertensión","Porque la naloxona dura menos que la morfina y puede reaparecer la depresión respiratoria","Porque la naloxona es hepatotóxica","Porque produce dependencia"], c:1, e:"Puede ser necesario repetir la dosis o administrarla en perfusión."},
+{q:"¿Por qué la codeína puede producir intoxicaciones graves en algunos niños y lactantes?", o:["Porque se acumula en el riñón inmaduro","Porque los metabolizadores ultrarrápidos del CYP2D6 producen mucha morfina","Porque es un agonista parcial","Porque bloquea la COX"], c:1, e:"Por eso está contraindicada en menores de 12 años y en la lactancia."},
+{q:"Según la escalera analgésica de la OMS, en un dolor moderado que no cede con paracetamol se añade:", o:["Un opioide mayor desde el principio","Un opioide menor, como el tramadol, con o sin el primer escalón","Un corticoide intravenoso","Un bloqueante neuromuscular"], c:1, e:"Segundo escalón: opioide menor, asociado o no a los analgésicos del primero."}]};
+
+
+</script>
+<script>
+(function(){
+"use strict";
+var main = document.getElementById("contenido");
+var store = { get:function(k){ try{ return JSON.parse(localStorage.getItem("farmaP1:"+k)); }catch(e){ return null; } },
+              set:function(k,v){ try{ localStorage.setItem("farmaP1:"+k, JSON.stringify(v)); }catch(e){} } };
+function md(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>"); }
+function blockOf(n){ for(var i=0;i<BLOQUES.length;i++){ if(BLOQUES[i].temas.indexOf(n)>-1) return BLOQUES[i]; } }
+function cvar(b){ return "var(--"+b.color+")"; }
+function best(n){ var s = store.get("t"+n); return s ? s : null; }
+
+/* ---------- índice lateral ---------- */
+function buildTabs(){
+  var h = "";
+  BLOQUES.forEach(function(b){
+    h += '<div class="tab" data-b="'+b.id+'" style="--c:'+cvar(b)+'"><button type="button" aria-expanded="false"><span class="chip">'+b.id+'</span><span class="tt">'+b.nombre+'<small>Temas '+b.temas[0]+'–'+b.temas[b.temas.length-1]+'</small></span></button><ol>';
+    b.temas.forEach(function(n){
+      var s = best(n);
+      h += '<li><a href="#tema-'+n+'" data-r="tema-'+n+'"><span class="n">'+n+'</span><span>'+TEMAS[n].t+'</span>'+(s?'<span class="done" title="Mejor resultado en la autoevaluación">'+s.ok+'/'+s.tot+'</span>':'')+'</a></li>';
+    });
+    h += '</ol></div>';
+  });
+  document.getElementById("tabs").innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll(".tab > button"), function(btn){
+    btn.addEventListener("click", function(){ var t = btn.parentNode; t.classList.toggle("open"); btn.setAttribute("aria-expanded", t.classList.contains("open")); });
+  });
+}
+function markNav(route){
+  Array.prototype.forEach.call(document.querySelectorAll("[data-r]"), function(a){ if(a.getAttribute("data-r")===route) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  var m = /^tema-(\d+)$/.exec(route);
+  if(m){ var b = blockOf(+m[1]); var tab = document.querySelector('.tab[data-b="'+b.id+'"]'); if(tab){ tab.classList.add("open"); tab.querySelector("button").setAttribute("aria-expanded","true"); } }
+}
+
+/* ---------- portada ---------- */
+function home(){
+  var h = '<section class="hero"><h1>Farmacología clínica para Enfermería</h1><p>Los seis bloques del primer parcial en un solo sitio: las ideas que no se pueden olvidar, los grupos de fármacos con sus ejemplos y avisos de seguridad, y una autoevaluación al final de cada tema.</p></section>';
+  h += '<div class="binder">';
+  BLOQUES.forEach(function(b){
+    var done=0; b.temas.forEach(function(n){ if(best(n)) done++; });
+    h += '<a href="#tema-'+b.temas[0]+'" style="--c:'+cvar(b)+'"><span class="roman">'+b.id+'</span><h2>'+b.nombre+'</h2><p>'+b.desc+'</p><p>Temas '+b.temas.join(", ")+'</p><div class="bar" aria-label="'+done+' de '+b.temas.length+' temas autoevaluados"><i style="width:'+(100*done/b.temas.length)+'%"></i></div></a>';
+  });
+  h += '</div><div class="how">'+
+    '<div><h3>Recorre los temas</h3><p>Usa las pestañas de colores de la izquierda. Cada bloque tiene su color, el mismo que en las diapositivas.</p></div>'+
+    '<div><h3>Abre las fichas</h3><p>Cada grupo farmacológico tiene su ficha: mecanismo, ejemplos, lo esencial y lo que vigila enfermería.</p></div>'+
+    '<div><h3>Autoevalúate</h3><p>Al final de cada tema hay preguntas con explicación. Tu mejor resultado queda guardado en este navegador.</p></div>'+
+    '<div><h3>Repasa mezclando</h3><p>En «Repaso» puedes generar un test aleatorio de los bloques que elijas.</p></div></div>';
+  h += footer();
+  return h;
+}
+function footer(){ return '<footer>Material de apoyo de la asignatura de Farmacología clínica (Grado en Enfermería, UPNA). No sustituye a las clases ni a la ficha técnica de cada medicamento.</footer>'; }
+
+/* ---------- tema ---------- */
+function shuffled(n){ var a=[]; for(var i=0;i<n;i++) a.push(i); for(var k=n-1;k>0;k--){ var j=Math.floor(Math.random()*(k+1)); var t=a[k]; a[k]=a[j]; a[j]=t; } return a; }
+function quizHTML(qs, id){
+  var L="ABCDEF", h='<div class="quiz" id="'+id+'">';
+  qs.forEach(function(q,i){
+    var ord = shuffled(q.o.length), c = ord.indexOf(q.c);
+    h += '<div class="q" data-c="'+c+'"><h3><span class="num">'+(i+1)+'</span>'+md(q.q)+'</h3><div class="opts">';
+    ord.forEach(function(oi,j){ h += '<button type="button" data-j="'+j+'"><span class="l">'+L[j]+'</span><span>'+md(q.o[oi])+'</span></button>'; });
+    h += '</div><div class="expl" aria-live="polite"></div><template>'+md(q.e)+'</template></div>';
+  });
+  h += '<div class="score"><p class="res">Responde a las '+qs.length+' preguntas.</p><button type="button" class="btn ghost again">Volver a empezar</button></div></div>';
+  return h;
+}
+function wireQuiz(id, onDone){
+  var box = document.getElementById(id); if(!box) return;
+  var qs = box.querySelectorAll(".q"), answered=0, ok=0;
+  Array.prototype.forEach.call(qs, function(q){
+    var c = +q.getAttribute("data-c"), ex = q.querySelector(".expl"), tpl = q.querySelector("template");
+    Array.prototype.forEach.call(q.querySelectorAll(".opts button"), function(b){
+      b.addEventListener("click", function(){
+        var j = +b.getAttribute("data-j"), right = (j===c);
+        Array.prototype.forEach.call(q.querySelectorAll(".opts button"), function(x){ x.disabled=true; if(+x.getAttribute("data-j")===c) x.classList.add("ok"); });
+        if(!right) b.classList.add("bad");
+        ex.innerHTML = (right?'<b class="r">Correcto.</b> ':'<b class="w">No es esa.</b> ') + tpl.innerHTML;
+        ex.classList.add("show");
+        answered++; if(right) ok++;
+        if(answered===qs.length){
+          box.querySelector(".res").textContent = "Resultado: "+ok+" de "+qs.length+" correctas.";
+          if(onDone) onDone(ok, qs.length);
+        } else box.querySelector(".res").textContent = "Llevas "+ok+" de "+answered+".";
+      });
+    });
+  });
+  box.querySelector(".again").addEventListener("click", function(){ render(true); });
+}
+function tema(n){
+  var T = TEMAS[n], b = blockOf(n);
+  if(!T) return notFound();
+  var h = '<div style="--c:'+cvar(b)+'">';
+  h += '<header class="thead"><span class="big" aria-hidden="true">'+n+'</span><span class="blk">Bloque '+b.id+'. '+b.nombre+'</span><h1>Tema '+n+'. '+T.t+'</h1></header>';
+  h += '<p class="lede">'+md(T.idea)+'</p>';
+  h += '<h2 class="sec">Lo esencial</h2><ul class="keys">'+T.claves.map(function(k){ return '<li>'+md(k)+'</li>'; }).join("")+'</ul>';
+  if(T.fig && FIGS[T.fig]) h += '<figure class="figure">'+FIGS[T.fig].svg+'<figcaption>'+FIGS[T.fig].cap+'</figcaption></figure>';
+  if(T.fig2 && FIGS[T.fig2]) h += '<figure class="figure">'+FIGS[T.fig2].svg+'<figcaption>'+FIGS[T.fig2].cap+'</figcaption></figure>';
+  h += '<h2 class="sec">'+(T.conceptos?'Conceptos clave':'Grupos y fármacos')+'</h2><div class="fichas">';
+  T.grupos.forEach(function(g,i){
+    h += '<details class="ficha"'+(i===0?' open':'')+'><summary><span class="strip"></span><span class="nm"><b>'+md(g.n)+'</b>'+(g.sub?'<span>'+md(g.sub)+'</span>':'')+'</span><span class="pm" aria-hidden="true">+</span></summary><div class="body">';
+    if(g.mec) h += '<div class="row"><b>'+(T.conceptos?'Qué es':'Cómo actúa')+'</b><div>'+md(g.mec)+'</div></div>';
+    if(g.ej && g.ej.length) h += '<div class="row"><b>'+(T.conceptos?'Ejemplos':'Fármacos')+'</b><div class="chips">'+g.ej.map(function(e){ return '<span>'+md(e)+'</span>'; }).join("")+'</div></div>';
+    if(g.clave) h += '<div class="row"><b>Lo esencial</b><div>'+md(g.clave)+'</div></div>';
+    if(g.alerta) h += '<div class="alerta">⚠️ '+md(g.alerta)+'</div>';
+    h += '</div></details>';
+  });
+  h += '</div>';
+  if(T.alertas && T.alertas.length) h += '<h2 class="sec">Lo que vigila enfermería</h2><div class="alerts">'+T.alertas.map(function(a){ return '<div>'+md(a)+'</div>'; }).join("")+'</div>';
+  if(T.enlaces) h += '<p class="links">🔗 '+md(T.enlaces)+'</p>';
+  h += '<h2 class="sec" id="autoevaluacion">Autoevaluación</h2>'+quizHTML(T.quiz, "quiz-"+n);
+  var all = []; BLOQUES.forEach(function(x){ all = all.concat(x.temas); });
+  var i = all.indexOf(n), prev = all[i-1], next = all[i+1];
+  h += '<nav class="pager" aria-label="Temas anterior y siguiente">'+(prev?'<a href="#tema-'+prev+'"><small>Anterior</small>Tema '+prev+'. '+TEMAS[prev].t+'</a>':'<span></span>')+(next?'<a href="#tema-'+next+'" style="text-align:right"><small>Siguiente</small>Tema '+next+'. '+TEMAS[next].t+'</a>':'')+'</nav>';
+  h += footer()+'</div>';
+  return h;
+}
+
+/* ---------- repaso ---------- */
+var repasoSel = null;
+function repaso(){
+  if(!repasoSel) repasoSel = BLOQUES.map(function(b){ return b.id; });
+  var h = '<header class="thead" style="--c:var(--ink)"><span class="big" aria-hidden="true">?</span><span class="blk">Test aleatorio</span><h1>Repaso mezclando temas</h1></header>';
+  h += '<p class="lede">Elige los bloques y genera un test de 10 preguntas al azar. Cada vez que pulses el botón saldrán preguntas distintas.</p><div class="filters">';
+  BLOQUES.forEach(function(b){ h += '<label style="--c:'+cvar(b)+'"><input type="checkbox" value="'+b.id+'"'+(repasoSel.indexOf(b.id)>-1?' checked':'')+'> Bloque '+b.id+'</label>'; });
+  h += '</div><button type="button" class="btn" id="gen">Generar test de 10 preguntas</button><div id="rq" style="margin-top:22px"></div>'+footer();
+  return h;
+}
+function wireRepaso(){
+  var go = function(){
+    repasoSel = Array.prototype.map.call(document.querySelectorAll(".filters input:checked"), function(i){ return i.value; });
+    var pool = [];
+    BLOQUES.forEach(function(b){ if(repasoSel.indexOf(b.id)>-1) b.temas.forEach(function(n){ TEMAS[n].quiz.forEach(function(q){ pool.push({q:"(Tema "+n+") "+q.q, o:q.o, c:q.c, e:q.e, b:b}); }); }); });
+    if(!pool.length){ document.getElementById("rq").innerHTML = '<p class="empty">Marca al menos un bloque para generar el test.</p>'; return; }
+    for(var i=pool.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=pool[i]; pool[i]=pool[j]; pool[j]=t; }
+    var sel = pool.slice(0,10);
+    document.getElementById("rq").innerHTML = '<div style="--c:var(--ink)">'+quizHTML(sel,"quiz-repaso")+'</div>';
+    wireQuiz("quiz-repaso");
+    var again = document.querySelector("#quiz-repaso .again"); var fresh = again.cloneNode(true); fresh.textContent="Otro test"; again.parentNode.replaceChild(fresh, again); fresh.addEventListener("click", go);
+  };
+  document.getElementById("gen").addEventListener("click", go);
+}
+
+/* ---------- índice de fármacos ---------- */
+var DRUGS = [];
+function buildDrugs(){
+  Object.keys(TEMAS).forEach(function(k){
+    var n=+k, T=TEMAS[n]; if(T.conceptos) return;
+    T.grupos.forEach(function(g){ (g.ej||[]).forEach(function(e){ DRUGS.push({d:e.replace(/\*\*/g,""), g:g.n.replace(/\*\*/g,""), n:n}); }); });
+  });
+  DRUGS.sort(function(a,b){ return a.d.localeCompare(b.d,"es"); });
+}
+function farmacos(){
+  var h = '<header class="thead" style="--c:var(--ink)"><span class="big" aria-hidden="true">Rx</span><span class="blk">Índice alfabético</span><h1>Fármacos de la A a la Z</h1></header><p class="lede">Todos los fármacos que aparecen en las fichas, con su grupo. Pulsa uno para ir a su tema.</p><div class="az">';
+  var cur="";
+  DRUGS.forEach(function(x){
+    var L = x.d.charAt(0).toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+    if(L!==cur){ cur=L; h += '<div class="letter">'+L+'</div>'; }
+    var b = blockOf(x.n);
+    h += '<a href="#tema-'+x.n+'" style="--c:'+cvar(b)+'"><i></i>'+md(x.d)+' <small>'+md(x.g)+' (T'+x.n+')</small></a>';
+  });
+  return h+'</div>'+footer();
+}
+
+/* ---------- búsqueda ---------- */
+function norm(s){ return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); }
+function search(term){
+  var t = norm(term), out = '<header class="thead" style="--c:var(--ink)"><span class="big" aria-hidden="true">⌕</span><span class="blk">Búsqueda</span><h1>Resultados para «'+md(term)+'»</h1></header><div class="results">', n=0;
+  Object.keys(TEMAS).forEach(function(k){
+    var T=TEMAS[k], b=blockOf(+k);
+    if(norm(T.t).indexOf(t)>-1){ out += '<a href="#tema-'+k+'" style="--c:'+cvar(b)+'"><small>Tema '+k+'</small>'+T.t+'</a>'; n++; }
+  });
+  var seen={};
+  DRUGS.forEach(function(x){
+    var key=x.d+x.n; if(seen[key]) return;
+    if(norm(x.d).indexOf(t)>-1 || norm(x.g).indexOf(t)>-1){ seen[key]=1; out += '<a href="#tema-'+x.n+'" style="--c:'+cvar(blockOf(x.n))+'"><small>'+md(x.g)+' · Tema '+x.n+'</small>'+md(x.d)+'</a>'; n++; }
+  });
+  if(!n) out += '<p class="empty">No hay coincidencias. Prueba con el nombre genérico (por ejemplo, «ibuprofeno» en lugar de una marca) o con el nombre de un grupo.</p>';
+  return out+'</div>';
+}
+function notFound(){ return '<p class="empty">Esa página no existe. Vuelve al <a href="#inicio">inicio</a>.</p>'; }
+
+/* ---------- enrutado ---------- */
+function render(keepScroll){
+  var r = (location.hash||"#inicio").slice(1) || "inicio", h;
+  var m = /^tema-(\d+)$/.exec(r);
+  if(m) h = tema(+m[1]); else if(r==="repaso") h = repaso(); else if(r==="farmacos") h = farmacos(); else { r="inicio"; h = home(); }
+  main.innerHTML = h;
+  markNav(r);
+  if(m) wireQuiz("quiz-"+m[1], function(ok,tot){ var prev = best(+m[1]); if(!prev || ok>=prev.ok){ store.set("t"+m[1], {ok:ok, tot:tot}); buildTabs(); markNav(r); } });
+  if(r==="repaso") wireRepaso();
+  if(!keepScroll) window.scrollTo(0,0);
+  document.body.classList.remove("menu"); document.getElementById("menuBtn").setAttribute("aria-expanded","false");
+}
+buildTabs(); buildDrugs();
+window.addEventListener("hashchange", function(){ document.getElementById("q").value=""; render(); });
+var qbox = document.getElementById("q"), qt;
+qbox.addEventListener("input", function(){ clearTimeout(qt); qt = setTimeout(function(){ var v=qbox.value.trim(); if(v.length>=2){ main.innerHTML = search(v); markNav(""); } else render(true); }, 180); });
+document.getElementById("menuBtn").addEventListener("click", function(){ var o = document.body.classList.toggle("menu"); this.setAttribute("aria-expanded", o); });
+document.addEventListener("keydown", function(e){ if(e.key==="Escape") document.body.classList.remove("menu"); });
+document.addEventListener("click", function(e){ if(document.body.classList.contains("menu") && !e.target.closest("#indice") && !e.target.closest("#menuBtn")) document.body.classList.remove("menu"); });
+render();
+})();
+</script>
+</body>
+</html>
